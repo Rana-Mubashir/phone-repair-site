@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/sections/landingPageComponents/categorySection/CategoryCard.jsx", "components/sections/landingPageComponents/categorySection/Main.jsx", "components/sections/brandsPage/TopBanner.jsx", "app/select-brand/[id]/page.jsx", "app/select-device/[id]/page.jsx", "components/sections/landingPageComponents/works&contactus/ContactUs.jsx", "app/repair-options/[id]/page.jsx"],
+  "exclude": ["node_modules"]
+}
