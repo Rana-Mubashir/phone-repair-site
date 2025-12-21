@@ -18,6 +18,7 @@ export default function CategorySection() {
   async function getCategories() {
     try {
       const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/category/getall`)
+      console.log("categories response",resp)
       if (resp) {
         console.log("response for categories", resp?.data?.categories)
         setCategories(resp?.data?.categories)
