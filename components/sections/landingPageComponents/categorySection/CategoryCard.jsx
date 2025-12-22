@@ -3,65 +3,99 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
-// Animation variants for the card
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4 },
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
   },
   hover: {
-    y: -5,
-    transition: { duration: 0.2 },
+    y: -8,
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
   },
 }
 
-export default function CategoryCard({ data }) {
+const imageVariants = {
+  hover: {
+    scale: 1.05,
+    transition: { duration: 0.4 },
+  },
+}
+
+const buttonVariants = {
+  hover: {
+    scale: 1.02,
+    transition: { duration: 0.2 },
+  },
+  tap: {
+    scale: 0.98,
+  },
+}
+
+export default function CategoryCard({ data, onEdit, onDelete, showActions = false }) {
   return (
     <motion.div
       variants={cardVariants}
+      initial="hidden"
+      animate="visible"
       whileHover="hover"
-      className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 h-full"
+      className="relative bg-gradient-to-br from-white to-gray-50/50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 max-w-sm mx-auto overflow-hidden border border-gray-200/60 backdrop-blur-sm group"
     >
-      <Link href={`/select-brand/${data._id}`} className="block h-full">
-        <div className="flex flex-col h-full">
-          {/* Image container */}
-          <div className="relative overflow-hidden h-48">
-            <img
-              src={data?.image || "/placeholder.svg?height=200&width=400"}
-              alt={data?.name || "Category image"}
-              className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
-            />
+      <Link href={`/select-brand/${data._id}`} className="block">
+        <div className="relative h-56 bg-gradient-to-br from-blue-50 via-white to-purple-50 overflow-hidden">
+          {/* Decorative corner accent */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-bl-full" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-400/5 to-purple-400/5 rounded-tr-full" />
 
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-              <div className="p-4 text-white">
-                <span className="font-medium flex items-center gap-1">
-                  View options <ArrowRight className="h-4 w-4" />
-                </span>
-              </div>
-            </div>
-          </div>
+          <motion.img
+            variants={imageVariants}
+            whileHover="hover"
+            src={data?.image || "/placeholder.svg?height=224&width=300"}
+            alt={data?.name || "Category image"}
+            className="relative w-full h-full object-contain p-6 z-10"
+          />
 
-          {/* Content */}
-          <div className="p-6 flex flex-col flex-grow">
-            <h3 className="font-bold text-xl text-center text-gray-900 mb-3">{data?.name || "Category Name"}</h3>
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-900/0 via-transparent to-transparent group-hover:from-blue-900/5 transition-all duration-500" />
+        </div>
 
-            <p className="text-center text-gray-600 flex-grow mb-4">
-              {data?.description ||
-                "Category description goes here. This explains what kind of devices can be repaired in this category."}
-            </p>
+        <div className="p-7 relative">
+          {/* Subtle top border accent */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent rounded-full" />
 
-            <div className="mt-auto">
-              <div className="bg-indigo-50 text-indigo-700 py-2 px-4 rounded-lg text-sm font-medium text-center hover:bg-indigo-100 transition-colors duration-300">
-                Explore {data?.name || "Category"}
-              </div>
-            </div>
+          <h3 className="font-bold text-2xl text-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-3 group-hover:from-blue-600 group-hover:via-purple-600 group-hover:to-blue-600 transition-all duration-300">
+            {data?.name || "Category Name"}
+          </h3>
+
+          <p className="text-gray-600 text-center text-sm leading-relaxed mb-7  px-2">
+            {data?.description || "No description available"}
+          </p>
+
+          <div className="flex justify-center">
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              className="relative inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl overflow-hidden"
+            >
+              {/* Button shimmer effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+
+              <span className="relative z-10">Explore {data?.name || "Category"}</span>
+              <ArrowRight className="relative z-10 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+            </motion.button>
           </div>
         </div>
       </Link>
+
+      <div className="absolute top-3 right-3 w-20 h-20 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full blur-xl group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
     </motion.div>
   )
 }
-

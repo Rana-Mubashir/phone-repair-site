@@ -7,7 +7,11 @@ function Footer() {
       <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row gap-8 p-4 md:p-8">
           <div className="w-full lg:w-1/3 flex flex-col gap-6 text-slate-300">
-            <img src="https://ik.imagekit.io/jlrg7lbkx/TechTweak%20(1).png?updatedAt=1745266126878" alt="logo" className="w-40 h-auto" />
+            <img 
+            src="https://ik.imagekit.io/e6xhkk2f6/phoneRepairLogoWhite.png" 
+            alt="logo" 
+            className="w-40 h-auto" 
+            />
             <p className="text-sm md:text-base leading-relaxed">
               Repairplus brings 41 years of Digital Repairs experience right to your Device. Our Technicians are
               equipped to help you with solutions that work best.

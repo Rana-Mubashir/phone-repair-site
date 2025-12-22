@@ -69,7 +69,7 @@ export default function Header() {
       <div className=" hidden md:flex px-6 md:px-12 py-3  flex-col md:flex-row justify-between items-center gap-6">
         <Link href="/">
           <Image
-            src="https://ik.imagekit.io/jlrg7lbkx/TechTweak%20(1).png?updatedAt=1745266126878"
+            src="https://ik.imagekit.io/e6xhkk2f6/phoneRepairLogo.png"
             alt="RepairPlus Logo"
             width={180}
             height={100}

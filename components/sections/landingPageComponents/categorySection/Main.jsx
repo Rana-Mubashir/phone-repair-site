@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-
-// Import the CategoryCard component
+import { FolderOpen, RefreshCw } from 'lucide-react'
 import CategoryCard from './CategoryCard'
 
 export default function CategorySection() {
@@ -18,15 +17,14 @@ export default function CategorySection() {
   async function getCategories() {
     try {
       const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/category/getall`)
-      console.log("categories response",resp)
+      console.log("categories response", resp)
       if (resp) {
         console.log("response for categories", resp?.data?.categories)
         setCategories(resp?.data?.categories)
       }
     } catch (error) {
       console.log("error in getting categories", error)
-    }
-    finally {
+    } finally {
       setLoading(false)
     }
   }
@@ -42,14 +40,13 @@ export default function CategorySection() {
   }
 
   return (
-    <section className="py-16 px-4 ">
+    <section className="py-16 px-4">
       <div className="container mx-auto">
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
             <span className="relative inline-block">
               <span className="relative z-10">Repair Categories</span>
-              {/* <span className="absolute bottom-2 left-0 w-full h-3 bg-indigo-100 -z-10"></span> */}
             </span>
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -76,20 +73,51 @@ export default function CategorySection() {
             ))}
           </div>
         ) : (
-          // Categories grid
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {categories && categories.map((category) => (
-              <CategoryCard
-                key={category._id}
-                data={category}
-              />
-            ))}
-          </motion.div>
+          // Check if categories exist
+          categories && categories.length > 0 ? (
+            // Categories grid
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {categories.map((category) => (
+                <CategoryCard
+                  key={category._id}
+                  data={category}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            // No categories found state
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center justify-center py-16 px-4 text-center"
+            >
+              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                <FolderOpen className="h-12 w-12 text-gray-400" />
+              </div>
+              
+              <h3 className="text-2xl font-semibold text-gray-700 mb-3">
+                No Categories Found
+              </h3>
+              
+              <p className="text-gray-500 max-w-md mb-8">
+                There are currently no repair categories available. Categories will appear here once they are added to the system.
+              </p>
+              
+              <button
+                onClick={getCategories}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors duration-200 shadow-sm"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </button>
+            </motion.div>
+          )
         )}
       </div>
     </section>
