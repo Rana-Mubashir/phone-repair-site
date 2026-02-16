@@ -12,7 +12,7 @@ function TopBanner({ categoryName }) {
                 {categoryName || "Device"} Repairs
               </h1>
               <p className="text-xl text-gray-700 mt-2">
-                Select Your Device
+                Select Your Device Brand
                 <span className="inline-block ml-2 animate-bounce">👇</span>
               </p>
               <div className="hidden md:block">

@@ -48,8 +48,10 @@ function Aboutus() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-3 mb-2"
         >
-          <div className="h-10 w-2 bg-[#34c5f1] rounded-full"></div>
-          <h1 className="text-4xl font-bold">About Us</h1>
+          <div className="h-10 w-2 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            About Us
+          </h1>
         </motion.div>
 
         <motion.p
@@ -84,7 +86,7 @@ function Aboutus() {
             variants={itemVariants}
             className="flex flex-col items-center justify-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] group"
           >
-            <div className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] group-hover:bg-[#34c5f1] group-hover:text-white transition-colors duration-300">
+            <div className="p-3 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
               {service.icon}
             </div>
             <p className="mt-3 font-medium text-center">{service.label}</p>
@@ -97,7 +99,7 @@ function Aboutus() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ delay: 0.4, duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-r from-[#34c5f1] to-[#2bb3df] text-white p-8 rounded-2xl"
+        className="relative overflow-hidden bg-gradient-to-br from-blue-600 to-purple-700 text-white p-8 rounded-2xl"
       >
         {/* Decorative circles */}
         <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white/10"></div>
@@ -108,11 +110,13 @@ function Aboutus() {
 
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <div className="text-4xl font-bold mb-1">{inView && <CountUp end={8} duration={2} />}+</div>
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                {inView && <CountUp end={8} duration={2} />}+
+              </div>
               <p className="text-white/80">Years Experience</p>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-1">
+              <div className="text-4xl font-bold mb-1 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
                 {inView && <CountUp end={15000} separator="," duration={2.5} />}+
               </div>
               <p className="text-white/80">Devices Repaired</p>
@@ -126,24 +130,35 @@ function Aboutus() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ delay: 0.6, duration: 0.6 }}
-        className="relative bg-slate-50 p-6 rounded-xl border-l-4 border-[#34c5f1]"
+        className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-xl border-l-4 border-purple-600"
       >
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M3 21V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V21L17 19L14 21L12 20L10 21L7 19L3 21Z"
-              stroke="currentColor"
+              stroke="url(#gradient)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" />
+                <stop offset="100%" stopColor="#9333EA" />
+              </linearGradient>
+            </defs>
           </svg>
         </div>
 
-        <h3 className="text-2xl font-medium mb-3">Our Vision</h3>
+        <h3 className="text-2xl font-medium mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Our Vision
+        </h3>
         <p className="text-slate-600 mb-4">Save time, Save money, With Quality Phone Repair Service</p>
         <p className="text-xl font-medium">
-          <span className="text-[#34c5f1]">Purchase - RepairPlus</span> for all your device needs
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">
+            Purchase - RepairPlus
+          </span>{" "}
+          for all your device needs
         </p>
       </motion.div>
 
@@ -152,30 +167,32 @@ function Aboutus() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="bg-white p-6 rounded-xl shadow-md"
+        className="bg-white p-6 rounded-xl shadow-md border border-purple-100"
       >
         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-          <span className="inline-block w-3 h-3 bg-[#34c5f1] rounded-full"></span>
-          Our Core Values
+          <span className="inline-block w-3 h-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full"></span>
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Our Core Values
+          </span>
         </h3>
 
         <ul className="space-y-3">
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-[#34c5f1] size-5 mt-0.5 flex-shrink-0" />
+            <CheckCircle className="text-purple-600 size-5 mt-0.5 flex-shrink-0" />
             <p className="text-slate-600">
-              <span className="font-medium text-slate-800">Excellence</span> - We strive for perfection in every repair
+              <span className="font-medium text-blue-600">Excellence</span> - We strive for perfection in every repair
             </p>
           </li>
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-[#34c5f1] size-5 mt-0.5 flex-shrink-0" />
+            <CheckCircle className="text-purple-600 size-5 mt-0.5 flex-shrink-0" />
             <p className="text-slate-600">
-              <span className="font-medium text-slate-800">Integrity</span> - Honest pricing and transparent service
+              <span className="font-medium text-blue-600">Integrity</span> - Honest pricing and transparent service
             </p>
           </li>
           <li className="flex items-start gap-2">
-            <CheckCircle className="text-[#34c5f1] size-5 mt-0.5 flex-shrink-0" />
+            <CheckCircle className="text-purple-600 size-5 mt-0.5 flex-shrink-0" />
             <p className="text-slate-600">
-              <span className="font-medium text-slate-800">Innovation</span> - Using the latest technology and
+              <span className="font-medium text-blue-600">Innovation</span> - Using the latest technology and
               techniques
             </p>
           </li>

@@ -35,10 +35,10 @@ export default function Header() {
       name: "Repair & Services",
       link: 'repair-services'
     },
-    {
-      name: "Stories",
-      link: 'stories'
-    },
+    // {
+    //   name: "Stories",
+    //   link: 'stories'
+    // },
     {
       name: "About Us",
       link: 'about-us'
@@ -54,7 +54,7 @@ export default function Header() {
       {/* Top Bar */}
       <div className="bg-gradient-to-r from-[#34c5f1] to-[#1e90ff] px-6 py-3 flex flex-col md:flex-row      justify-between items-center ">
         <p className="text-white font-medium text-center text-sm md:text-base">
-          Welcome to Repairplus Experts - Your Trusted Repair Shop
+          Welcome to Tech Repair - Your Trusted Repair Shop
         </p>
         <div className="flex gap-3">
           {[Facebook, Instagram, Twitter, Youtube].map((Icon, index) => (
@@ -125,16 +125,15 @@ export default function Header() {
                 )
               }
             </div>
-            <Link href='/stories' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
+            {/* <Link href='/stories' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
               Stories
-            </Link>
+            </Link> */}
             <Link href='/about-us' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
               About Us
             </Link>
             <Link href='/contact-us' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
               Contact Us
             </Link>
-
           </nav>
 
           {/* Contact & Search */}
@@ -146,9 +145,9 @@ export default function Header() {
                 <p className="text-white font-bold">1800-56-78-9012</p>
               </div>
             </div>
-            <button className="bg-[#34c5f1] text-white p-3 rounded-full hover:bg-[#1e90ff] transition-colors hidden md:block">
+            {/* <button className="bg-[#34c5f1] text-white p-3 rounded-full hover:bg-[#1e90ff] transition-colors hidden md:block">
               <Search size={20} />
-            </button>
+            </button> */}
           </div>
         </div>
 

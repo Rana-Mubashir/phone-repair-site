@@ -15,7 +15,7 @@ function page() {
       <Aboutus />
       <CounterSection />
       <WorkAndContactSection />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Brands />
     </div>
   )

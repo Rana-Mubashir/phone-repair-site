@@ -40,7 +40,7 @@ function Page() {
       <div className="container mx-auto px-4 py-12">
         <div className="flex justify-center items-center mb-12">
           <p className="text-center text-slate-700 max-w-[90%] md:max-w-[70%] lg:max-w-[60%] text-lg leading-relaxed">
-            Indepth Solutions is your one-stop shop for all your device needs. We provide expert advice, fast turnaround
+            Tech Repair is your one-stop shop for all your device needs. We provide expert advice, fast turnaround
             times, competitive pricing, and quality workmanship. With our team of highly skilled professionals, we can
             help you with any device repairs.
           </p>
@@ -48,7 +48,7 @@ function Page() {
 
         <div className="mb-10">
           <h1 className="text-center text-3xl md:text-4xl font-bold text-[#34c5f1] relative">
-            <span className="relative z-10">Select Your Device</span>
+            <span className="relative z-10">Select Your Device Brand</span>
             <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#34c5f1] rounded-full"></span>
           </h1>
         </div>
