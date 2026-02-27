@@ -69,7 +69,7 @@ function Work() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-3 mb-2"
         >
-          <div className="h-10 w-2 bg-[#34c5f1] rounded-full"></div>
+          <div className="h-10 w-2 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
           <h1 className="text-4xl font-bold">Works Before & After</h1>
         </motion.div>
         <motion.p

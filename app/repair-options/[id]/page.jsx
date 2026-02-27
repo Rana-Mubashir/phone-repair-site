@@ -79,7 +79,7 @@ export default function RepairOptionsPage() {
                     variants={container}
                     className="bg-white rounded-2xl shadow-xl overflow-hidden mb-12"
                 >
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 md:p-10">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 md:p-10">
                         <div className="flex flex-col md:flex-row items-center gap-8">
                             <motion.div variants={item} className="relative w-64 h-64 flex-shrink-0">
                                 {deviceInfo?.image ? (
@@ -95,11 +95,11 @@ export default function RepairOptionsPage() {
                             </motion.div>
                             <div className="flex-1 space-y-4">
                                 <motion.div variants={item}>
-                                    <div className="inline-block bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 py-1 text-sm mb-2">
+                                    <div className="inline-block bg-gradient-to-r from-blue-50 to-purple-50 text-transparent bg-clip-text bg-gradient-to-r from-[#34c5f1] to-[#a855f7] border border-purple-200 rounded-full px-3 py-1 text-sm mb-2">
                                         Professional Repair Service
                                     </div>
                                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
-                                        {deviceInfo?.name || "Device"} <span className="text-blue-600">Repair</span>
+                                        {deviceInfo?.name || "Device"} <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">Repair</span>
                                     </h1>
                                     <p className="mt-2 text-xl text-gray-700 font-medium">Expert repairs by certified technicians</p>
                                 </motion.div>
@@ -145,11 +145,11 @@ export default function RepairOptionsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[1, 2, 3].map((i) => (
                             <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
-                                <div className="h-48 bg-gray-200"></div>
+                                <div className="h-48 bg-gradient-to-r from-blue-100 to-purple-100"></div>
                                 <div className="p-6">
-                                    <div className="h-6 bg-gray-200 rounded mb-4"></div>
-                                    <div className="h-20 bg-gray-200 rounded"></div>
-                                    <div className="h-10 bg-gray-200 rounded mt-4"></div>
+                                    <div className="h-6 bg-gradient-to-r from-blue-100 to-purple-100 rounded mb-4"></div>
+                                    <div className="h-20 bg-gradient-to-r from-blue-100 to-purple-100 rounded"></div>
+                                    <div className="h-10 bg-gradient-to-r from-blue-100 to-purple-100 rounded mt-4"></div>
                                 </div>
                             </div>
                         ))}
@@ -173,7 +173,7 @@ export default function RepairOptionsPage() {
                                     }}
                                     className="bg-white rounded-xl shadow-md overflow-hidden"
                                 >
-                                    <div className="relative h-48 bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-center p-6">
+                                    <div className="relative h-48 bg-gradient-to-r from-blue-50 to-purple-50 flex items-center justify-center p-6">
                                         {option.image ? (
                                             <motion.div whileHover={{ scale: 1.1 }} transition={{ type: "spring", stiffness: 300 }}>
                                                 <Image
@@ -185,11 +185,11 @@ export default function RepairOptionsPage() {
                                                 />
                                             </motion.div>
                                         ) : (
-                                            <PenTool className="w-20 h-20 text-blue-300" />
+                                            <PenTool className="w-20 h-20 bg-gradient-to-r from-[#049fce] to-[#6411b3] bg-clip-text text-transparent" />
                                         )}
 
                                         {option.price && (
-                                            <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                            <div className="absolute top-4 right-4 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white px-3 py-1 rounded-full text-sm font-medium">
                                                 ${option.price}
                                             </div>
                                         )}
@@ -201,7 +201,7 @@ export default function RepairOptionsPage() {
                                         <div className="flex items-center gap-4 text-sm text-gray-500 mt-2 mb-4">
                                             {option.estimatedTime && (
                                                 <div className="flex items-center gap-1">
-                                                    <Clock className="h-4 w-4 text-blue-500" />
+                                                    <Clock className="h-4 w-4 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent" />
                                                     <span>{option.estimatedTime}</span>
                                                 </div>
                                             )}
@@ -231,7 +231,7 @@ export default function RepairOptionsPage() {
                                             <motion.button
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
-                                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center"
+                                                className="w-full bg-gradient-to-r from-[#34c5f1] to-[#a855f7] hover:from-[#2ba8d0] hover:to-[#9333ea] text-white py-2 px-4 rounded-lg font-medium flex items-center justify-center transition-all duration-300"
                                             >
                                                 Book Repair
                                                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -258,8 +258,8 @@ export default function RepairOptionsPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <motion.div whileHover={{ y: -5 }} className="bg-gray-50 rounded-xl p-6 text-center">
-                            <div className="w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                                <FiTool className="h-6 w-6 text-blue-600" />
+                            <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                                <FiTool className="h-6 w-6 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent" />
                             </div>
                             <h4 className="text-lg font-semibold text-gray-900 mb-2">Expert Technicians</h4>
                             <p className="text-gray-600 text-sm">
@@ -268,7 +268,7 @@ export default function RepairOptionsPage() {
                         </motion.div>
 
                         <motion.div whileHover={{ y: -5 }} className="bg-gray-50 rounded-xl p-6 text-center">
-                            <div className="w-12 h-12 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                            <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full flex items-center justify-center">
                                 <FiShield className="h-6 w-6 text-green-600" />
                             </div>
                             <h4 className="text-lg font-semibold text-gray-900 mb-2">Quality Guarantee</h4>
@@ -278,8 +278,8 @@ export default function RepairOptionsPage() {
                         </motion.div>
 
                         <motion.div whileHover={{ y: -5 }} className="bg-gray-50 rounded-xl p-6 text-center">
-                            <div className="w-12 h-12 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
-                                <FiClock className="h-6 w-6 text-purple-600" />
+                            <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                                <FiClock className="h-6 w-6 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent" />
                             </div>
                             <h4 className="text-lg font-semibold text-gray-900 mb-2">Quick Turnaround</h4>
                             <p className="text-gray-600 text-sm">
@@ -288,7 +288,7 @@ export default function RepairOptionsPage() {
                         </motion.div>
                     </div>
 
-                    <div className="mt-10 bg-blue-50 rounded-xl p-6 border border-blue-100">
+                    <div className="mt-10 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-purple-100">
                         <div className="flex flex-col md:flex-row items-center gap-6">
                             <div className="flex-1">
                                 <h4 className="text-xl font-semibold text-gray-900 mb-2">Need help choosing the right repair?</h4>
@@ -300,7 +300,7 @@ export default function RepairOptionsPage() {
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium"
+                                className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] hover:from-[#2ba8d0] hover:to-[#9333ea] text-white py-2 px-6 rounded-lg font-medium transition-all duration-300"
                             >
                                 Contact Support
                             </motion.button>
@@ -314,7 +314,7 @@ export default function RepairOptionsPage() {
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
-                    className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-xl p-8 md:p-10 text-white"
+                    className="mt-16 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-2xl shadow-xl p-8 md:p-10 text-white"
                 >
                     <div className="text-center mb-8">
                         <h3 className="text-2xl font-bold">Our Repair Excellence</h3>

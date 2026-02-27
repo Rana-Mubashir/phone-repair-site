@@ -47,17 +47,19 @@ function Page() {
         </div>
 
         <div className="mb-10">
-          <h1 className="text-center text-3xl md:text-4xl font-bold text-[#34c5f1] relative">
-            <span className="relative z-10">Select Your Device Brand</span>
-            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-[#34c5f1] rounded-full"></span>
+          <h1 className="text-center text-3xl md:text-4xl font-bold relative">
+            <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent relative z-10">
+              Select Your Device Brand
+            </span>
+            <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full"></span>
           </h1>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-pulse flex flex-col items-center">
-              <div className="h-32 w-32 bg-blue-200 rounded-lg mb-4"></div>
-              <div className="h-4 w-24 bg-blue-200 rounded"></div>
+              <div className="h-32 w-32 bg-gradient-to-r from-blue-200 to-purple-200 rounded-lg mb-4"></div>
+              <div className="h-4 w-24 bg-gradient-to-r from-blue-200 to-purple-200 rounded"></div>
               <p className="mt-4 text-slate-500">Loading devices...</p>
             </div>
           </div>
@@ -67,7 +69,7 @@ function Page() {
               <p className="text-red-500">{error}</p>
               <button
                 onClick={getBrands}
-                className="mt-4 px-4 py-2 bg-[#34c5f1] text-white rounded-lg hover:bg-[#2ba8d0] transition-colors"
+                className="mt-4 px-4 py-2 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] hover:from-[#2ba8d0] hover:to-[#9333ea] text-white rounded-lg transition-all duration-300"
               >
                 Try Again
               </button>
@@ -79,22 +81,24 @@ function Page() {
               data.brands.map((brand, index) => (
                 <Link href={`/select-device/${brand._id}`} key={index} className="w-full max-w-xs">
                   <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden h-full flex flex-col">
-                    <div className="p-6 flex-grow flex items-center justify-center bg-gradient-to-br from-blue-50 to-white">
+                    <div className="p-6 flex-grow flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
                       <img
                         src={brand?.image || "/placeholder.svg"}
                         alt={brand?.name || "Device"}
                         className="h-48 w-48 object-contain transition-transform hover:scale-105 duration-300"
                       />
                     </div>
-                    <div className="p-4 border-t border-blue-100">
-                      <p className="text-lg font-bold text-center text-[#34c5f1]">{brand?.name}</p>
+                    <div className="p-4 border-t border-purple-100">
+                      <p className="text-lg font-bold text-center bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">
+                        {brand?.name}
+                      </p>
                     </div>
                   </div>
                 </Link>
               ))
             ) : (
               <div className="col-span-full py-16 text-center">
-                <div className="bg-blue-50 rounded-lg p-8 inline-block">
+                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 inline-block">
                   <p className="text-xl text-slate-700">No brands found for this category</p>
                   <p className="mt-2 text-slate-500">Please try another category or check back later</p>
                 </div>
@@ -108,4 +112,3 @@ function Page() {
 }
 
 export default Page
-

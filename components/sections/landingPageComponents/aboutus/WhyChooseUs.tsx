@@ -90,7 +90,7 @@ function WhyChooseUs() {
             className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border-l-4 border-purple-600 group hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50"
           >
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-600/10 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-600 group-hover:text-white transition-all duration-300">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-600/10 text-blue-600 transition-all duration-300">
                 {reason.icon}
               </div>
               <div>
@@ -120,7 +120,7 @@ function WhyChooseUs() {
 
         <div className="space-y-6">
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
               1
             </div>
             <div>
@@ -130,7 +130,7 @@ function WhyChooseUs() {
           </div>
 
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
               2
             </div>
             <div>
@@ -140,7 +140,7 @@ function WhyChooseUs() {
           </div>
 
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
               3
             </div>
             <div>
@@ -150,7 +150,7 @@ function WhyChooseUs() {
           </div>
 
           <div className="flex gap-4">
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
+            <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
               4
             </div>
             <div>

@@ -22,19 +22,19 @@ function Footer() {
             </p>
 
             <div className="flex items-center gap-4 mt-2">
-              <a href="#" className="text-slate-400 hover:text-[#34c5f1] transition-colors duration-300">
+              <a href="#" className="text-slate-400 hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:bg-clip-text hover:text-transparent transition-all duration-300">
                 <span className="sr-only">Facebook</span>
                 <Facebook size={24} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#34c5f1] transition-colors duration-300">
+              <a href="#" className="text-slate-400 hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:bg-clip-text hover:text-transparent transition-all duration-300">
                 <span className="sr-only">Instagram</span>
                 <Instagram size={24} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#34c5f1] transition-colors duration-300">
+              <a href="#" className="text-slate-400 hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:bg-clip-text hover:text-transparent transition-all duration-300">
                 <span className="sr-only">Twitter</span>
                 <Twitter size={24} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#34c5f1] transition-colors duration-300">
+              <a href="#" className="text-slate-400 hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:bg-clip-text hover:text-transparent transition-all duration-300">
                 <span className="sr-only">YouTube</span>
                 <Youtube size={24} />
               </a>
@@ -49,8 +49,8 @@ function Footer() {
         <div className="border-t border-slate-700/50 mt-6 pt-6">
           <p className="text-center text-slate-400 text-sm md:text-base">
             Copyrights © {new Date().getFullYear()} All Rights Reserved by{" "}
-            <span className="text-[#34c5f1] hover:text-[#5ad0f8] transition-colors duration-300 cursor-pointer">
-              Indepth Solutions
+            <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent hover:from-[#5ad0f8] hover:to-[#c084fc] transition-all duration-300 cursor-pointer">
+              Company
             </span>
             .
           </p>
@@ -61,4 +61,3 @@ function Footer() {
 }
 
 export default Footer
-

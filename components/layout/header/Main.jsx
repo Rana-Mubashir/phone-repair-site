@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <header className="w-full shadow-md">
       {/* Top Bar */}
-      <div className="bg-gradient-to-r from-[#34c5f1] to-[#1e90ff] px-6 py-3 flex flex-col md:flex-row      justify-between items-center ">
+      <div className="bg-gradient-to-r from-purple-400 to-indigo-500 px-6 py-3 flex flex-col md:flex-row      justify-between items-center ">
         <p className="text-white font-medium text-center text-sm md:text-base">
           Welcome to Tech Repair - Your Trusted Repair Shop
         </p>

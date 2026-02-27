@@ -83,7 +83,7 @@ export default function CategoryCard({ data, onEdit, onDelete, showActions = fal
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              className="relative inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl overflow-hidden"
+              className="relative inline-flex items-center gap-2 bg-gradient-to-r from-purple-400 to-indigo-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-3.5 px-8 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl overflow-hidden"
             >
               {/* Button shimmer effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />

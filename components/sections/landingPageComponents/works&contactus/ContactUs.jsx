@@ -71,7 +71,7 @@ function ContactUs() {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-3 mb-2"
         >
-          <div className="h-10 w-2 bg-[#34c5f1] rounded-full"></div>
+          <div className="h-10 w-2 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
           <h1 className="text-4xl font-bold">Make An Appointment</h1>
         </motion.div>
         <motion.p
@@ -177,7 +177,7 @@ function ContactUs() {
               disabled={isSubmitting}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              className={`w-fit text-white bg-[#34c5f1] py-3 px-8 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center ${isSubmitting ? "opacity-80" : ""}`}
+              className={`w-fit text-white bg-gradient-to-r from-blue-400 to-purple-500  py-3 px-8 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center ${isSubmitting ? "opacity-80" : ""}`}
             >
               {isSubmitting ? (
                 <div className="flex items-center gap-2">
