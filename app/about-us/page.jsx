@@ -42,7 +42,7 @@ export default function AboutUsPage() {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative bg-gradient-to-r from-blue-200 to-blue-100 text-white overflow-hidden"
+        className="relative bg-gradient-to-r from-blue-200 via-blue-100 to-purple-100 text-white overflow-hidden"
       >
         <div className="container mx-auto px-4 py-20 md:py-0 relative z-10">
           <div className="flex flex-col md:flex-row items-center">
@@ -52,8 +52,8 @@ export default function AboutUsPage() {
               animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-[#34c5f1]">Expert Device Repair You Can Trust</h1>
-              <div className="h-1 w-24 bg-[#34c5f1] rounded-full mb-6"></div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">Expert Device Repair You Can Trust</h1>
+              <div className="h-1 w-24 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mb-6"></div>
               <p className="text-xl text-gray-700 mb-8 max-w-lg">
                 We specialize in repairing mobile phones, tablets, and laptops of all brands with quality parts and
                 expert technicians.
@@ -61,13 +61,13 @@ export default function AboutUsPage() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/repair-options"
-                  className="bg-[#34c5f1] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
+                  className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
                 >
                   Start Repair
                 </Link>
                 <Link
                   href="/contact-us"
-                  className="bg-transparent border-2 border-[#34c5f1] px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-300 text-[#34c5f1]"
+                  className="bg-transparent border-2 border-[#34c5f1] px-6 py-3 rounded-lg font-medium hover:bg-gradient-to-r hover:from-[#34c5f1]/10 hover:to-[#a855f7]/10 transition-all duration-300 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent"
                 >
                   Contact Us
                 </Link>
@@ -81,7 +81,7 @@ export default function AboutUsPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="relative">
-                <div className="absolute -inset-4 bg-white/20 rounded-full blur-lg"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#34c5f1]/20 to-[#a855f7]/20 rounded-full blur-lg"></div>
                 <img
                   src="https://i.shgcdn.com/16fdb501-6cf7-4b89-aeba-34cb0323943a/-/format/auto/-/preview/3000x3000/-/quality/lighter/"
                   alt="Device Repair"
@@ -103,7 +103,7 @@ export default function AboutUsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Story</h2>
-            <div className="h-1 w-20 bg-[#34c5f1] rounded-full mx-auto mb-6"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mx-auto mb-6"></div>
             <p className="max-w-3xl mx-auto text-gray-600 text-lg">
               Learn about our journey to becoming the most trusted device repair service in the region.
             </p>
@@ -116,7 +116,7 @@ export default function AboutUsPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <div className="relative">
-                <div className="absolute -inset-4 bg-[#34c5f1]/10 rounded-lg blur-lg"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 rounded-lg blur-lg"></div>
                 <img
                   src="https://localcomputer.expert/wp-content/uploads/2024/04/Inside-the-workshop-2.jpg"
                   alt="Our Workshop"
@@ -145,7 +145,7 @@ export default function AboutUsPage() {
 
               <div className="space-y-4 pt-4">
                 <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-[#34c5f1]/10 p-1.5 rounded-full">
+                  <div className="mt-1 bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-1.5 rounded-full">
                     <CheckCircle className="h-5 w-5 text-[#34c5f1]" />
                   </div>
                   <div>
@@ -158,7 +158,7 @@ export default function AboutUsPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="mt-1 bg-[#34c5f1]/10 p-1.5 rounded-full">
+                  <div className="mt-1 bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-1.5 rounded-full">
                     <CheckCircle className="h-5 w-5 text-[#34c5f1]" />
                   </div>
                   <div>
@@ -185,7 +185,7 @@ export default function AboutUsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Our Services</h2>
-            <div className="h-1 w-20 bg-[#34c5f1] rounded-full mx-auto mb-6"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mx-auto mb-6"></div>
             <p className="max-w-3xl mx-auto text-gray-600 text-lg">
               We repair all types of devices across all major brands with quality parts and expert service.
             </p>
@@ -202,7 +202,7 @@ export default function AboutUsPage() {
               variants={fadeIn}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-blue-100/30 p-8 flex justify-center">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-8 flex justify-center">
                 <Smartphone className="h-20 w-20 text-[#34c5f1]" />
               </div>
               <div className="p-6">
@@ -236,8 +236,8 @@ export default function AboutUsPage() {
               variants={fadeIn}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-blue-100/30 p-8 flex justify-center">
-                <Tablet className="h-20 w-20 text-[#34c5f1]" />
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-8 flex justify-center">
+                <Tablet className="h-20 w-20 text-[#a855f7]" />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-3">Tablet Repair</h3>
@@ -246,19 +246,19 @@ export default function AboutUsPage() {
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#34c5f1]" />
+                    <CheckCircle className="h-4 w-4 text-[#a855f7]" />
                     <span className="text-gray-700">Screen Replacement</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#34c5f1]" />
+                    <CheckCircle className="h-4 w-4 text-[#a855f7]" />
                     <span className="text-gray-700">Battery Service</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#34c5f1]" />
+                    <CheckCircle className="h-4 w-4 text-[#a855f7]" />
                     <span className="text-gray-700">Charging Port Repair</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-[#34c5f1]" />
+                    <CheckCircle className="h-4 w-4 text-[#a855f7]" />
                     <span className="text-gray-700">Software Issues</span>
                   </li>
                 </ul>
@@ -270,7 +270,7 @@ export default function AboutUsPage() {
               variants={fadeIn}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-blue-100/30 p-8 flex justify-center">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-8 flex justify-center">
                 <Laptop className="h-20 w-20 text-[#34c5f1]" />
               </div>
               <div className="p-6">
@@ -313,7 +313,7 @@ export default function AboutUsPage() {
           >
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-r from-[#34c5f1]/5 to-blue-100/20 p-8 rounded-xl text-center"
+              className="bg-gradient-to-r from-[#34c5f1]/5 to-[#a855f7]/5 p-8 rounded-xl text-center"
             >
               <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                 <Users className="h-10 w-10 text-[#34c5f1]" />
@@ -324,10 +324,10 @@ export default function AboutUsPage() {
 
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-r from-[#34c5f1]/5 to-blue-100/20 p-8 rounded-xl text-center"
+              className="bg-gradient-to-r from-[#34c5f1]/5 to-[#a855f7]/5 p-8 rounded-xl text-center"
             >
               <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                <Tool className="h-10 w-10 text-[#34c5f1]" />
+                <Tool className="h-10 w-10 text-[#a855f7]" />
               </div>
               <h3 className="text-4xl font-bold text-gray-800 mb-2">25,000+</h3>
               <p className="text-gray-600">Devices Repaired</p>
@@ -335,7 +335,7 @@ export default function AboutUsPage() {
 
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-r from-[#34c5f1]/5 to-blue-100/20 p-8 rounded-xl text-center"
+              className="bg-gradient-to-r from-[#34c5f1]/5 to-[#a855f7]/5 p-8 rounded-xl text-center"
             >
               <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                 <Award className="h-10 w-10 text-[#34c5f1]" />
@@ -346,10 +346,10 @@ export default function AboutUsPage() {
 
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-r from-[#34c5f1]/5 to-blue-100/20 p-8 rounded-xl text-center"
+              className="bg-gradient-to-r from-[#34c5f1]/5 to-[#a855f7]/5 p-8 rounded-xl text-center"
             >
               <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                <ThumbsUp className="h-10 w-10 text-[#34c5f1]" />
+                <ThumbsUp className="h-10 w-10 text-[#a855f7]" />
               </div>
               <h3 className="text-4xl font-bold text-gray-800 mb-2">99%</h3>
               <p className="text-gray-600">Satisfaction Rate</p>
@@ -368,7 +368,7 @@ export default function AboutUsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
-            <div className="h-1 w-20 bg-[#34c5f1] rounded-full mx-auto mb-6"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mx-auto mb-6"></div>
             <p className="max-w-3xl mx-auto text-gray-600 text-lg">
               We're committed to providing the best repair experience with quality, speed, and excellent customer
               service.
@@ -377,7 +377,7 @@ export default function AboutUsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <Award className="h-7 w-7 text-[#34c5f1]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">Quality Parts</h3>
@@ -388,8 +388,8 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
-                <Clock className="h-7 w-7 text-[#34c5f1]" />
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+                <Clock className="h-7 w-7 text-[#a855f7]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">Fast Service</h3>
               <p className="text-gray-600">
@@ -399,7 +399,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <Users className="h-7 w-7 text-[#34c5f1]" />
               </div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">Expert Technicians</h3>
@@ -410,7 +410,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -421,7 +421,7 @@ export default function AboutUsPage() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-7 w-7 text-[#34c5f1]"
+                  className="h-7 w-7 text-[#a855f7]"
                 >
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
                 </svg>
@@ -434,7 +434,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -458,7 +458,7 @@ export default function AboutUsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="bg-[#34c5f1]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -469,7 +469,7 @@ export default function AboutUsPage() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-7 w-7 text-[#34c5f1]"
+                  className="h-7 w-7 text-[#a855f7]"
                 >
                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                 </svg>
@@ -484,8 +484,8 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section ref={teamRef} className="py-20 bg-white">
+      {/* Team Section - Commented out as in original */}
+      {/* <section ref={teamRef} className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <motion.div
             className="text-center mb-16"
@@ -494,7 +494,7 @@ export default function AboutUsPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Meet Our Team</h2>
-            <div className="h-1 w-20 bg-[#34c5f1] rounded-full mx-auto mb-6"></div>
+            <div className="h-1 w-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mx-auto mb-6"></div>
             <p className="max-w-3xl mx-auto text-gray-600 text-lg">
               Our skilled technicians bring years of experience and passion to every repair.
             </p>
@@ -544,17 +544,17 @@ export default function AboutUsPage() {
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
-                  <p className="text-[#34c5f1] font-medium mb-3">{member.role}</p>
+                  <p className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-medium mb-3">{member.role}</p>
                   <p className="text-gray-600">{member.bio}</p>
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
-      <section id="contact" ref={ctaRef} className="py-20 bg-gradient-to-r from-[#34c5f1] to-[#96b9d1] text-white">
+      <section id="contact" ref={ctaRef} className="py-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white">
         <div className="container mx-auto px-4">
           <motion.div
             className="max-w-3xl mx-auto text-center"
@@ -568,18 +568,18 @@ export default function AboutUsPage() {
               Contact us today for a free diagnostic and get your device working like new again!
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a
+              <Link
                 href="/contact-us"
                 className="bg-white text-[#34c5f1] px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
               >
                 Contact Us
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/repair-services"
                 className="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-all duration-300"
               >
                 Start Repair
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>

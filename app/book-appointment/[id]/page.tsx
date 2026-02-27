@@ -198,9 +198,9 @@ function Page() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-700 mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#34c5f1] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading appointment details...</p>
         </div>
       </div>
@@ -210,7 +210,7 @@ function Page() {
   return (
     <>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 py-20 px-6 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-[#34c5f1] to-[#a855f7] py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-white rounded-full"></div>
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-white rounded-full"></div>
@@ -230,7 +230,7 @@ function Page() {
                 <Wrench className="w-5 h-5" />
                 <span>Certified Technicians</span>
               </div>
-              <div className="w-px h-6 bg-blue-400"></div>
+              <div className="w-px h-6 bg-white/30"></div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5" />
                 <span>Quality Parts</span>
@@ -251,7 +251,7 @@ function Page() {
                   <div className={`
                     w-10 h-10 rounded-full flex items-center justify-center font-semibold
                     ${currentStep >= step
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white'
                       : 'bg-gray-200 text-gray-600'}
                   `}>
                     {step}
@@ -265,7 +265,7 @@ function Page() {
                 {step < 3 && (
                   <div className={`
                     w-24 h-1 mx-4 rounded
-                    ${currentStep > step ? 'bg-blue-600' : 'bg-gray-200'}
+                    ${currentStep > step ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7]' : 'bg-gray-200'}
                   `}></div>
                 )}
               </React.Fragment>
@@ -299,7 +299,7 @@ function Page() {
                           value={formData.firstName}
                           onChange={handleInputChange}
                           placeholder="John"
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.firstName ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.firstName ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -322,7 +322,7 @@ function Page() {
                           value={formData.lastName}
                           onChange={handleInputChange}
                           placeholder="Doe"
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.lastName ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.lastName ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -345,7 +345,7 @@ function Page() {
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="john@example.com"
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.email ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.email ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -368,7 +368,7 @@ function Page() {
                           value={formData.confirmEmail}
                           onChange={handleInputChange}
                           placeholder="john@example.com"
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.confirmEmail ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.confirmEmail ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -391,7 +391,7 @@ function Page() {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="1234567890"
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.phone ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.phone ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -423,8 +423,8 @@ function Page() {
                             className={`
                               relative border rounded-xl p-4 cursor-pointer transition-all
                               ${formData.repairOption === option.id
-                                ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200'
-                                : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'}
+                                ? 'border-[#34c5f1] bg-blue-50 ring-2 ring-[#34c5f1]/20'
+                                : 'border-gray-200 hover:border-[#34c5f1] hover:bg-gray-50'}
                             `}
                           >
                             <input
@@ -438,7 +438,7 @@ function Page() {
                             <div className="flex items-start gap-3">
                               <div className={`
                                 p-2 rounded-lg
-                                ${formData.repairOption === option.id ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}
+                                ${formData.repairOption === option.id ? 'bg-[#34c5f1] text-white' : 'bg-gray-100 text-gray-600'}
                               `}>
                                 <Icon className="w-5 h-5" />
                               </div>
@@ -471,8 +471,8 @@ function Page() {
                             className={`
                               block border rounded-lg p-4 cursor-pointer transition-all
                               ${formData.clinic === clinic.id
-                                ? 'border-blue-600 bg-blue-50'
-                                : 'border-gray-200 hover:border-blue-300'}
+                                ? 'border-[#34c5f1] bg-blue-50'
+                                : 'border-gray-200 hover:border-[#34c5f1]'}
                             `}
                           >
                             <input
@@ -489,7 +489,7 @@ function Page() {
                                 <p className="text-sm text-gray-500 mt-1">{clinic.address}</p>
                                 <p className="text-sm text-gray-500 mt-1">Hours: {clinic.hours}</p>
                               </div>
-                              <MapPin className="w-5 h-5 text-blue-600" />
+                              <MapPin className="w-5 h-5 text-[#34c5f1]" />
                             </div>
                           </label>
                         ))}
@@ -516,7 +516,7 @@ function Page() {
                           value={formData.date}
                           onChange={handleInputChange}
                           min={new Date().toISOString().split('T')[0]}
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none ${errors.date ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.date ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
                       </div>
@@ -537,7 +537,7 @@ function Page() {
                           name="timeSlot"
                           value={formData.timeSlot}
                           onChange={handleInputChange}
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none bg-white ${errors.timeSlot ? 'border-red-500' : 'border-gray-300'
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none appearance-none bg-white ${errors.timeSlot ? 'border-red-500' : 'border-gray-300'
                             }`}
                         >
                           <option value="">Select a time slot</option>
@@ -565,7 +565,7 @@ function Page() {
                       onChange={handleInputChange}
                       rows={4}
                       placeholder="Any specific issues or special requests?"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none resize-none"
                     ></textarea>
                   </div>
                 </div>
@@ -630,7 +630,7 @@ function Page() {
                       </div>
                     </div>
 
-                    <div className="bg-blue-50 rounded-xl p-6">
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
                       <h3 className="font-semibold text-gray-800 mb-4">Price Summary</h3>
                       <div className="space-y-2">
                         <div className="flex justify-between">
@@ -644,7 +644,7 @@ function Page() {
                         <div className="border-t border-blue-200 pt-2 mt-2">
                           <div className="flex justify-between">
                             <span className="font-bold text-gray-800">Total</span>
-                            <span className="font-bold text-blue-600">${deviceInfo?.price}</span>
+                            <span className="font-bold text-[#34c5f1]">${deviceInfo?.price}</span>
                           </div>
                         </div>
                       </div>
@@ -666,14 +666,14 @@ function Page() {
                 {currentStep < 3 ? (
                   <button
                     onClick={handleNextStep}
-                    className="ml-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="ml-auto px-6 py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300"
                   >
                     Next Step
                   </button>
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    className="ml-auto px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                    className="ml-auto px-8 py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center gap-2"
                   >
                     <CheckCircle className="w-5 h-5" />
                     Confirm Booking
@@ -687,8 +687,8 @@ function Page() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-24">
               <div className="text-center mb-6">
-                <div className="w-24 h-24 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Smartphone className="w-12 h-12 text-blue-600" />
+                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                  <Smartphone className="w-12 h-12 text-[#34c5f1]" />
                 </div>
                 <h3 className="font-bold text-xl text-gray-800">{deviceInfo?.name}</h3>
                 <p className="text-gray-600">{deviceInfo?.repairType}</p>
@@ -697,8 +697,8 @@ function Page() {
               <div className="space-y-4 mb-6">
 
                 <div className="flex items-center gap-3 text-sm">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Wrench className="w-4 h-4 text-blue-600" />
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                    <Wrench className="w-4 h-4 text-[#34c5f1]" />
                   </div>
                   <div>
                     <p className="font-medium text-gray-800">Certified Technicians</p>
@@ -707,8 +707,8 @@ function Page() {
                 </div>
 
                 <div className="flex items-center gap-3 text-sm">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-purple-600" />
+                  <div className="w-8 h-8 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-[#a855f7]" />
                   </div>
                   <div>
                     <p className="font-medium text-gray-800">Quality Parts</p>
@@ -728,13 +728,13 @@ function Page() {
                 </div>
                 <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t border-gray-200">
                   <span>Total:</span>
-                  <span className="text-blue-600">${deviceInfo?.price}</span>
+                  <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">${deviceInfo?.price}</span>
                 </div>
               </div>
 
-              <div className="mt-6 bg-gray-50 rounded-lg p-4">
+              <div className="mt-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-4">
                 <p className="text-xs text-gray-500 flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
+                  <Shield className="w-4 h-4 text-[#34c5f1]" />
                   Your payment information is secure and encrypted
                 </p>
               </div>
@@ -762,8 +762,8 @@ function Page() {
                 {/* Header with Logo */}
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-3">
-                    {/* Your Logo - Replace with your actual logo */}
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                    {/* Logo with gradient */}
+                    <div className="w-12 h-12 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-lg flex items-center justify-center">
                       <Smartphone className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -775,7 +775,7 @@ function Page() {
                   {/* Download Button */}
                   <button
                     onClick={downloadReceipt}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -805,23 +805,23 @@ function Page() {
                 </div>
 
                 {/* Receipt Content */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-8 mb-6 border-2 border-blue-100">
+                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 mb-6 border-2 border-[#34c5f1]/20">
                   {/* Watermark */}
                   <div className="absolute opacity-5 pointer-events-none">
-                    <Smartphone className="w-64 h-64 text-blue-600" />
+                    <Smartphone className="w-64 h-64 text-[#34c5f1]" />
                   </div>
 
                   {/* Booking Number */}
                   <div className="text-center mb-6">
                     <p className="text-sm text-gray-600">Booking Number</p>
-                    <p className="text-3xl font-bold text-blue-600 font-mono">{bookingDetails.bookingNumber}</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-mono">{bookingDetails.bookingNumber}</p>
                   </div>
 
                   {/* Device & Customer Info */}
                   <div className="grid grid-cols-2 gap-8 mb-6">
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                       <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <Smartphone className="w-4 h-4 text-blue-600" />
+                        <Smartphone className="w-4 h-4 text-[#34c5f1]" />
                         Device Details
                       </h3>
                       <div className="space-y-2">
@@ -838,7 +838,7 @@ function Page() {
 
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                       <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                        <User className="w-4 h-4 text-blue-600" />
+                        <User className="w-4 h-4 text-[#34c5f1]" />
                         Customer Details
                       </h3>
                       <div className="space-y-2">
@@ -861,7 +861,7 @@ function Page() {
                   {/* Appointment Details */}
                   <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
                     <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-blue-600" />
+                      <Calendar className="w-4 h-4 text-[#34c5f1]" />
                       Appointment Details
                     </h3>
                     <div className="grid grid-cols-3 gap-4">
@@ -887,7 +887,7 @@ function Page() {
                   {/* Price Summary */}
                   <div className="bg-white p-4 rounded-lg shadow-sm">
                     <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-blue-600" />
+                      <DollarSign className="w-4 h-4 text-[#34c5f1]" />
                       Payment Summary
                     </h3>
                     <div className="space-y-2">
@@ -902,7 +902,7 @@ function Page() {
                       <div className="border-t border-gray-200 pt-2 mt-2">
                         <div className="flex justify-between">
                           <span className="font-bold text-gray-800">Total Paid:</span>
-                          <span className="font-bold text-blue-600">${bookingDetails.price}</span>
+                          <span className="font-bold text-[#34c5f1]">${bookingDetails.price}</span>
                         </div>
                       </div>
                     </div>
@@ -917,15 +917,15 @@ function Page() {
 
                 {/* Contact Info */}
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Mail className="w-5 h-5 text-blue-600" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                    <Mail className="w-5 h-5 text-[#34c5f1]" />
                     <p className="text-sm text-gray-600">
                       Confirmation email sent to <span className="font-medium">{bookingDetails.email}</span>
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Phone className="w-5 h-5 text-blue-600" />
+                  <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                    <Phone className="w-5 h-5 text-[#34c5f1]" />
                     <p className="text-sm text-gray-600">
                       We'll send you a reminder at <span className="font-medium">{bookingDetails.phone}</span>
                     </p>
@@ -951,7 +951,7 @@ function Page() {
                   </button>
                   <button
                     onClick={downloadReceipt}
-                    className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

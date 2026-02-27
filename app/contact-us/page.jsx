@@ -76,7 +76,7 @@ export default function ContactPage() {
         initial={{ opacity: 0 }}
         animate={heroInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative bg-gradient-to-r from-[#34c5f1] to-[#2980b9] text-white py-20 px-6 md:px-10 overflow-hidden"
+        className="relative bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white py-20 px-6 md:px-10 overflow-hidden"
       >
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/10 -translate-y-1/2 translate-x-1/4"></div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
               initial={{ y: -20, opacity: 0 }}
               animate={heroInView ? { y: 0, opacity: 1 } : { y: -20, opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl md:text-5xl font-bold mb-4"
+              className="text-4xl md:text-5xl font-bold mb-4 text-white"
             >
               Get in Touch
             </motion.h1>
@@ -96,7 +96,7 @@ export default function ContactPage() {
               initial={{ width: 0 }}
               animate={heroInView ? { width: 100 } : { width: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="h-1 w-24 bg-white rounded-full mb-6"
+              className="h-1 w-24 bg-gradient-to-r from-white to-purple-200 rounded-full mb-6"
             ></motion.div>
             <motion.p
               initial={{ y: 20, opacity: 0 }}
@@ -124,7 +124,7 @@ export default function ContactPage() {
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-6 flex items-center">
-                <span className="inline-block w-2 h-8 bg-[#34c5f1] rounded-full mr-3"></span>
+                <span className="inline-block w-2 h-8 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mr-3"></span>
                 Contact Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -134,12 +134,12 @@ export default function ContactPage() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] w-fit mb-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#34c5f1] w-fit mb-4">
                     <Phone className="size-6" />
                   </div>
                   <h3 className="font-medium text-lg mb-1">Phone</h3>
                   <p className="text-slate-500">Customer Support</p>
-                  <a href="tel:+15551234567" className="text-[#34c5f1] font-medium hover:underline">
+                  <a href="tel:+15551234567" className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-medium hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300">
                     +1 (555) 123-4567
                   </a>
                 </motion.div>
@@ -150,12 +150,12 @@ export default function ContactPage() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                   className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] w-fit mb-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#a855f7] w-fit mb-4">
                     <Mail className="size-6" />
                   </div>
                   <h3 className="font-medium text-lg mb-1">Email</h3>
                   <p className="text-slate-500">Send us a message</p>
-                  <a href="mailto:support@repairplus.com" className="text-[#34c5f1] font-medium hover:underline">
+                  <a href="mailto:support@repairplus.com" className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-medium hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300">
                     support@repairplus.com
                   </a>
                 </motion.div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                   transition={{ duration: 0.5, delay: 0.4 }}
                   className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] w-fit mb-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#34c5f1] w-fit mb-4">
                     <MapPin className="size-6" />
                   </div>
                   <h3 className="font-medium text-lg mb-1">Location</h3>
@@ -184,7 +184,7 @@ export default function ContactPage() {
                   transition={{ duration: 0.5, delay: 0.5 }}
                   className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
-                  <div className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] w-fit mb-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#a855f7] w-fit mb-4">
                     <Clock className="size-6" />
                   </div>
                   <h3 className="font-medium text-lg mb-1">Working Hours</h3>
@@ -201,25 +201,25 @@ export default function ContactPage() {
               className="bg-white p-6 rounded-xl shadow-sm"
             >
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="inline-block w-2 h-6 bg-[#34c5f1] rounded-full"></span>
+                <span className="inline-block w-2 h-6 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full"></span>
                 Follow Us
               </h3>
               <div className="flex gap-4">
                 <a
                   href="#"
-                  className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] hover:bg-[#34c5f1] hover:text-white transition-colors duration-300"
+                  className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#34c5f1] hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:text-white transition-all duration-300"
                 >
                   <Facebook className="size-5" />
                 </a>
                 <a
                   href="#"
-                  className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] hover:bg-[#34c5f1] hover:text-white transition-colors duration-300"
+                  className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#a855f7] hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:text-white transition-all duration-300"
                 >
                   <Twitter className="size-5" />
                 </a>
                 <a
                   href="#"
-                  className="p-3 rounded-full bg-[#34c5f1]/10 text-[#34c5f1] hover:bg-[#34c5f1] hover:text-white transition-colors duration-300"
+                  className="p-3 rounded-full bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 text-[#34c5f1] hover:bg-gradient-to-r hover:from-[#34c5f1] hover:to-[#a855f7] hover:text-white transition-all duration-300"
                 >
                   <Instagram className="size-5" />
                 </a>
@@ -235,7 +235,7 @@ export default function ContactPage() {
             className="bg-white p-8 rounded-xl shadow-md"
           >
             <h2 className="text-2xl font-bold mb-6 flex items-center">
-              <span className="inline-block w-2 h-8 bg-[#34c5f1] rounded-full mr-3"></span>
+              <span className="inline-block w-2 h-8 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mr-3"></span>
               Send Us a Message
             </h2>
 
@@ -363,7 +363,7 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`w-full md:w-auto text-white bg-[#34c5f1] py-3 px-8 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${isSubmitting ? "opacity-80" : ""}`}
+                  className={`w-full md:w-auto text-white bg-gradient-to-r from-[#34c5f1] to-[#a855f7] py-3 px-8 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 hover:from-[#2ba8d0] hover:to-[#9333ea] ${isSubmitting ? "opacity-80" : ""}`}
                 >
                   {isSubmitting ? (
                     <>
@@ -384,7 +384,7 @@ export default function ContactPage() {
       </motion.section>
 
       {/* Map Section */}
-      <motion.section
+      {/* <motion.section
         ref={mapRef}
         initial={{ opacity: 0, y: 30 }}
         animate={mapInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -392,12 +392,11 @@ export default function ContactPage() {
         className="container mx-auto py-10 px-6 md:px-10"
       >
         <h2 className="text-2xl font-bold mb-6 flex items-center">
-          <span className="inline-block w-2 h-8 bg-[#34c5f1] rounded-full mr-3"></span>
+          <span className="inline-block w-2 h-8 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mr-3"></span>
           Find Us
         </h2>
         <div className="bg-white p-4 rounded-xl shadow-md">
           <div className="aspect-[16/9] w-full rounded-lg overflow-hidden">
-            {/* Replace with your actual map embed code */}
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.3059353029!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1649760633247!5m2!1sen!2s"
               width="100%"
@@ -411,7 +410,7 @@ export default function ContactPage() {
             ></iframe>
           </div>
         </div>
-      </motion.section>
+      </motion.section> */}
 
       {/* Business Hours Section */}
       <motion.section
@@ -422,7 +421,7 @@ export default function ContactPage() {
         className="container mx-auto py-10 px-6 md:px-10"
       >
         <h2 className="text-2xl font-bold mb-6 flex items-center">
-          <span className="inline-block w-2 h-8 bg-[#34c5f1] rounded-full mr-3"></span>
+          <span className="inline-block w-2 h-8 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mr-3"></span>
           Business Hours
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -462,7 +461,7 @@ export default function ContactPage() {
         transition={{ duration: 0.6 }}
         className="container mx-auto py-16 px-6 md:px-10"
       >
-        <div className="bg-gradient-to-r from-[#34c5f1] to-[#2980b9] rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/10 -translate-y-1/2 translate-x-1/4"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-white/10 translate-y-1/3 -translate-x-1/3"></div>
@@ -476,9 +475,9 @@ export default function ContactPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href="tel:+15551234567"
-                className="bg-white text-[#34c5f1] font-medium py-3 px-8 rounded-lg hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] flex items-center gap-2"
+                className="bg-white bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-medium py-3 px-8 rounded-lg hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] flex items-center gap-2 border border-white text-white"
               >
-                <Phone className="size-5" />
+                <Phone className="size-5 text-white" />
                 <span>Call Now</span>
               </a>
               <a
