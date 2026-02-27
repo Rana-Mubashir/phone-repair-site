@@ -39,7 +39,7 @@ export default function RepairOptionsPage() {
             const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/repairoptions/getdeviceoptions/${id}`)
 
             if (resp) {
-                console.log("response for repair options", resp)
+                console.log("response in repair options", resp)
                 setData(resp?.data?.data)
                 setDeviceInfo({
                     name: resp?.data?.data?.name || "Your Device",
@@ -227,7 +227,7 @@ export default function RepairOptionsPage() {
                                             <span className="text-xs text-gray-500 ml-1">5.0 (24 reviews)</span>
                                         </div>
 
-                                        <Link href={`/book-appointment?service=${option._id}`}>
+                                        <Link href={`/book-appointment/${option._id}`}>
                                             <motion.button
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
