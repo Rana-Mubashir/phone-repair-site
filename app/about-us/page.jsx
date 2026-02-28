@@ -370,7 +370,7 @@ export default function AboutUsPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
             <div className="h-1 w-20 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-full mx-auto mb-6"></div>
             <p className="max-w-3xl mx-auto text-gray-600 text-lg">
-              We're committed to providing the best repair experience with quality, speed, and excellent customer
+              We are committed to providing the best repair experience with quality, speed, and excellent customer
               service.
             </p>
           </motion.div>

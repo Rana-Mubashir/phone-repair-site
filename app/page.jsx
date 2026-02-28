@@ -4,7 +4,7 @@ import CategorySection from '../components/sections/landingPageComponents/catego
 import Aboutus from '../components/sections/landingPageComponents/aboutus/Main'
 import CounterSection from '../components/sections/landingPageComponents/counterSection/Main'
 import Brands from '../components/sections/landingPageComponents/brands/Main'
-import Testimonials from '../components/sections/landingPageComponents/testimonials/Main'
+// import Testimonials from '../components/sections/landingPageComponents/testimonials/Main'
 import WorkAndContactSection from '../components/sections/landingPageComponents/works&contactus/Main'
 
 function page() {

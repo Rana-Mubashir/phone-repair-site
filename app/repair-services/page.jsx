@@ -169,7 +169,7 @@ function Page() {
                   </div>
                   <h3 className="text-xl font-medium text-gray-800 mb-2">No Categories Found</h3>
                   <p className="text-gray-500">
-                    We're currently updating our device categories. Please check back later.
+                    We are currently updating our device categories. Please check back later.
                   </p>
                 </div>
               </div>
