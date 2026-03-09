@@ -72,7 +72,9 @@ function ContactUs() {
           className="flex items-center gap-3 mb-2"
         >
           <div className="h-10 w-2 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
-          <h1 className="text-4xl font-bold">Make An Appointment</h1>
+          <h1 className=" text-[26px] md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Make An Appointment
+          </h1>
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}

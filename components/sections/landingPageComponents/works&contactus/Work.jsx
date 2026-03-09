@@ -70,7 +70,9 @@ function Work() {
           className="flex items-center gap-3 mb-2"
         >
           <div className="h-10 w-2 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
-          <h1 className="text-4xl font-bold">Works Before & After</h1>
+          <h1 className="text-[26px] md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Works Before & After
+            </h1>
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}
@@ -98,7 +100,8 @@ function Work() {
                     Before
                   </div>
                   <img
-                    src={pair.before || "/placeholder.svg"}
+                    // src={pair.before || "/placeholder.svg"}
+                    src="https://picsum.photos/400/300?random=1"
                     alt={`Before ${pair.label}`}
                     className="w-full h-[120px] object-cover transition-transform duration-300 group-hover:scale-105"
                   />
