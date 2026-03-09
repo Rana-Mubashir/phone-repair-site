@@ -21,7 +21,9 @@ import {
   Store,
   Home,
   AlertCircle,
-  X
+  X,
+  Loader2,
+  Store as StoreIcon
 } from 'lucide-react'
 
 function Page() {
@@ -33,6 +35,11 @@ function Page() {
   const [currentStep, setCurrentStep] = useState(1)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [bookingDetails, setBookingDetails] = useState(null)
+  
+  // Shop addresses state
+  const [shopAddresses, setShopAddresses] = useState([])
+  const [loadingAddresses, setLoadingAddresses] = useState(false)
+  const [addressesError, setAddressesError] = useState(null)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -57,6 +64,16 @@ function Page() {
     }
   }, [id])
 
+  // Fetch shop addresses when clinic option is selected
+  useEffect(() => {
+    if (formData.repairOption === 'clinic') {
+      fetchShopAddresses()
+    } else {
+      setShopAddresses([])
+      setAddressesError(null)
+    }
+  }, [formData.repairOption])
+
   async function getRepairDetails() {
     setIsLoading(true)
     try {
@@ -79,6 +96,27 @@ function Page() {
     }
   }
 
+  // Fetch shop addresses from API
+  const fetchShopAddresses = async () => {
+    setLoadingAddresses(true)
+    setAddressesError(null)
+    try {
+      // Fetch only active addresses
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/address/active`)
+      console.log("response for addresses",response)
+      if (response.data.success) {
+        setShopAddresses(response.data.data)
+      } else {
+        setAddressesError('Failed to load shop addresses')
+      }
+    } catch (error) {
+      console.error('Error fetching shop addresses:', error)
+      setAddressesError('Network error. Please try again.')
+    } finally {
+      setLoadingAddresses(false)
+    }
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -87,7 +125,6 @@ function Page() {
       setErrors(prev => ({ ...prev, [name]: '' }))
     }
   }
-
 
   const validateStep = (step) => {
     const newErrors = {}
@@ -129,6 +166,9 @@ function Page() {
       // Generate booking number
       const bookingNumber = 'BK' + Date.now().toString().slice(-8) + Math.random().toString(36).substring(2, 8).toUpperCase()
 
+      // Get selected clinic details
+      const selectedClinic = shopAddresses.find(c => c._id === formData.clinic)
+
       setBookingDetails({
         ...formData,
         bookingNumber,
@@ -136,7 +176,8 @@ function Page() {
         repairType: deviceInfo?.repairType,
         price: deviceInfo?.price,
         bookingDate: new Date().toLocaleDateString(),
-        bookingTime: new Date().toLocaleTimeString()
+        bookingTime: new Date().toLocaleTimeString(),
+        clinicDetails: selectedClinic // Add clinic details for receipt
       })
 
       setShowConfirmation(true)
@@ -147,7 +188,6 @@ function Page() {
     const receiptElement = document.getElementById('booking-receipt')
     if (receiptElement) {
       try {
-        // Capture the receipt as canvas
         const canvas = await html2canvas(receiptElement, {
           scale: 2,
           backgroundColor: '#ffffff',
@@ -156,18 +196,14 @@ function Page() {
           windowHeight: receiptElement.scrollHeight
         })
 
-        // Create PDF
         const pdf = new jsPDF({
           orientation: 'portrait',
           unit: 'px',
           format: [canvas.width * 0.75, canvas.height * 0.75]
         })
 
-        // Add image to PDF
         const imgData = canvas.toDataURL('image/png')
         pdf.addImage(imgData, 'PNG', 0, 0, canvas.width * 0.75, canvas.height * 0.75)
-
-        // Download PDF
         pdf.save(`receipt-${bookingDetails.bookingNumber}.pdf`)
       } catch (error) {
         console.error('Error generating receipt:', error)
@@ -178,12 +214,6 @@ function Page() {
   const repairOptions = [
     { id: 'clinic', label: 'At Clinic', icon: Store, description: 'Visit our repair center' },
     { id: 'postal', label: 'Postal Repair', icon: Truck, description: 'Mail your device to us' },
-  ]
-
-  const clinics = [
-    { id: 'downtown', name: 'Downtown Clinic', address: '123 Main St, Downtown', hours: '9AM - 6PM' },
-    { id: 'citycenter', name: 'City Center Repair', address: '456 Market St, City Center', hours: '10AM - 8PM' },
-    { id: 'techfix', name: 'TechFix Hub', address: '789 Tech Ave, Silicon Valley', hours: '8AM - 8PM' }
   ]
 
   const timeSlots = [
@@ -459,42 +489,90 @@ function Page() {
                     )}
                   </div>
 
-                  {/* Clinic Selection (conditional) */}
+                  {/* Clinic Selection with actual shop addresses */}
                   {formData.repairOption === 'clinic' && (
                     <div className="mb-8">
-                      <label className="block text-gray-700 font-medium mb-4">
-                        Select Clinic <span className="text-red-500">*</span>
-                      </label>
-                      <div className="space-y-3">
-                        {clinics.map((clinic) => (
-                          <label
-                            key={clinic.id}
-                            className={`
-                              block border rounded-lg p-4 cursor-pointer transition-all
-                              ${formData.clinic === clinic.id
-                                ? 'border-[#34c5f1] bg-blue-50'
-                                : 'border-gray-200 hover:border-[#34c5f1]'}
-                            `}
-                          >
-                            <input
-                              type="radio"
-                              name="clinic"
-                              value={clinic.id}
-                              checked={formData.clinic === clinic.id}
-                              onChange={handleInputChange}
-                              className="sr-only"
-                            />
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <p className="font-medium text-gray-800">{clinic.name}</p>
-                                <p className="text-sm text-gray-500 mt-1">{clinic.address}</p>
-                                <p className="text-sm text-gray-500 mt-1">Hours: {clinic.hours}</p>
-                              </div>
-                              <MapPin className="w-5 h-5 text-[#34c5f1]" />
-                            </div>
-                          </label>
-                        ))}
+                      <div className="flex items-center justify-between mb-4">
+                        <label className="block text-gray-700 font-medium">
+                          Select Clinic <span className="text-red-500">*</span>
+                        </label>
+                        {loadingAddresses && (
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Loading clinics...
+                          </div>
+                        )}
                       </div>
+
+                      {loadingAddresses ? (
+                        <div className="text-center py-8 bg-gray-50 rounded-lg">
+                          <Loader2 className="w-8 h-8 animate-spin text-[#34c5f1] mx-auto mb-3" />
+                          <p className="text-gray-600">Loading available clinics...</p>
+                        </div>
+                      ) : addressesError ? (
+                        <div className="text-center py-8 bg-red-50 rounded-lg">
+                          <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
+                          <p className="text-red-600 mb-2">Failed to load clinics</p>
+                          <button
+                            onClick={fetchShopAddresses}
+                            className="text-sm text-[#34c5f1] hover:underline"
+                          >
+                            Try again
+                          </button>
+                        </div>
+                      ) : shopAddresses.length === 0 ? (
+                        <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                          <StoreIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                          <h3 className="text-lg font-semibold text-gray-700 mb-2">No Clinics Available</h3>
+                          <p className="text-gray-500 max-w-md mx-auto">
+                            We currently don't have any active clinic locations. 
+                            Please choose the "Postal Repair" option or contact our support.
+                          </p>
+                          <div className="mt-4">
+                            <button
+                              onClick={() => setFormData(prev => ({ ...prev, repairOption: 'postal' }))}
+                              className="text-sm bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                            >
+                              Switch to Postal Repair
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                          {shopAddresses.map((clinic) => (
+                            <label
+                              key={clinic._id}
+                              className={`
+                                block border rounded-lg p-4 cursor-pointer transition-all
+                                ${formData.clinic === clinic._id
+                                  ? 'border-[#34c5f1] bg-blue-50 ring-2 ring-[#34c5f1]/20'
+                                  : 'border-gray-200 hover:border-[#34c5f1] hover:bg-gray-50'}
+                              `}
+                            >
+                              <input
+                                type="radio"
+                                name="clinic"
+                                value={clinic._id}
+                                checked={formData.clinic === clinic._id}
+                                onChange={handleInputChange}
+                                className="sr-only"
+                              />
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <p className="font-medium text-gray-800">{clinic.name}</p>
+                                  <p className="text-sm text-gray-500 mt-1">{clinic.address}</p>
+                                  <p className="text-sm text-gray-500 mt-1">
+                                    <Clock className="inline w-3 h-3 mr-1" />
+                                    {clinic.timing}
+                                  </p>
+                                </div>
+                                <MapPin className="w-5 h-5 text-[#34c5f1] flex-shrink-0" />
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+
                       {errors.clinic && (
                         <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
                           <AlertCircle className="w-4 h-4" /> {errors.clinic}
@@ -586,7 +664,7 @@ function Page() {
                         </div>
                         <div className='max-w-full'>
                           <p className="text-sm text-gray-500">Email</p>
-                          <p className="font-medium break-words">{formData.email}</p> {/* Added break-words */}
+                          <p className="font-medium break-words">{formData.email}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">Phone</p>
@@ -612,11 +690,14 @@ function Page() {
                             {repairOptions.find(opt => opt.id === formData.repairOption)?.label}
                           </p>
                         </div>
-                        {formData.clinic && (
-                          <div>
+                        {formData.clinic && shopAddresses.find(c => c._id === formData.clinic) && (
+                          <div className="col-span-2">
                             <p className="text-sm text-gray-500">Clinic</p>
                             <p className="font-medium">
-                              {clinics.find(c => c.id === formData.clinic)?.name}
+                              {shopAddresses.find(c => c._id === formData.clinic)?.name}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {shopAddresses.find(c => c._id === formData.clinic)?.address}
                             </p>
                           </div>
                         )}
@@ -696,7 +777,6 @@ function Page() {
               </div>
 
               <div className="space-y-4 mb-6">
-
                 <div className="flex items-center gap-3 text-sm">
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
                     <Wrench className="w-4 h-4 text-[#34c5f1]" />
@@ -765,7 +845,7 @@ function Page() {
               onClick={(e) => e.stopPropagation()}
             >
               <div id="booking-receipt" className="relative p-4 sm:p-6 md:p-8">
-                {/* Header with Logo and Download Button - Stack on mobile */}
+                {/* Header with Logo and Download Button */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
@@ -777,7 +857,6 @@ function Page() {
                     </div>
                   </div>
 
-                  {/* Download Button - Full width on mobile */}
                   <button
                     onClick={downloadReceipt}
                     className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-colors text-sm sm:text-base"
@@ -789,7 +868,6 @@ function Page() {
                   </button>
                 </div>
 
-                {/* Close Button - Adjusted position for mobile */}
                 <button
                   onClick={() => {
                     setShowConfirmation(false)
@@ -800,7 +878,7 @@ function Page() {
                   <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
 
-                {/* Success Message - Adjusted for mobile */}
+                {/* Success Message */}
                 <div className="text-center mb-6 sm:mb-8">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                     <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
@@ -811,7 +889,6 @@ function Page() {
 
                 {/* Receipt Content */}
                 <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-[#34c5f1]/20 relative overflow-hidden">
-                  {/* Watermark - Hidden on mobile */}
                   <div className="hidden sm:block absolute opacity-5 pointer-events-none">
                     <Smartphone className="w-48 sm:w-64 h-48 sm:h-64 text-[#34c5f1]" />
                   </div>
@@ -824,7 +901,7 @@ function Page() {
                     </p>
                   </div>
 
-                  {/* Device & Customer Info - Stack on mobile */}
+                  {/* Device & Customer Info */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6">
                     <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
                       <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
@@ -883,10 +960,15 @@ function Page() {
                       <div>
                         <p className="text-gray-500 text-xs sm:text-sm">Location</p>
                         <p className="text-sm sm:text-base font-medium break-words">
-                          {bookingDetails.repairOption === 'clinic'
-                            ? clinics.find(c => c.id === bookingDetails.clinic)?.name
+                          {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails
+                            ? bookingDetails.clinicDetails.name
                             : repairOptions.find(opt => opt.id === bookingDetails.repairOption)?.label}
                         </p>
+                        {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            {bookingDetails.clinicDetails.address}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -922,7 +1004,7 @@ function Page() {
                   </div>
                 </div>
 
-                {/* Contact Info - Stack on mobile */}
+                {/* Contact Info */}
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
                     <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#34c5f1] flex-shrink-0 mt-0.5 sm:mt-0" />
@@ -939,7 +1021,7 @@ function Page() {
                   </div>
                 </div>
 
-                {/* Action Buttons - Stack on mobile */}
+                {/* Action Buttons */}
                 <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => {
