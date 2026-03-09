@@ -123,7 +123,7 @@ function Page() {
           <>
             {data && data.length > 0 ? (
               <div className="overflow-x-auto pb-6">
-                <div className="flex justify-center items-center flex-nowrap gap-6 min-w-full pb-4">
+                <div className="flex justify-center items-center flex-wrap gap-6 min-w-full pb-4">
                   {data.map((category, index) => (
                     <Link href={`/select-brand/${category._id}`} key={index} className="w-64 flex-shrink-0 first:ml-0">
                       <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col overflow-hidden group border border-purple-50">
@@ -150,16 +150,6 @@ function Page() {
                     </Link>
                   ))}
                 </div>
-                {/* <div className="flex justify-center mt-6">
-                  <div className="flex gap-1.5">
-                    {[...Array(Math.min(5, Math.ceil(data.length / 4)))].map((_, i) => (
-                      <div
-                        key={i}
-                        className={`h-2 w-2 rounded-full ${i === 0 ? "bg-gradient-to-r from-[#34c5f1] to-[#a855f7]" : "bg-gradient-to-r from-[#34c5f1]/30 to-[#a855f7]/30"}`}
-                      ></div>
-                    ))}
-                  </div>
-                </div> */}
               </div>
             ) : (
               <div className="py-16 flex justify-center">

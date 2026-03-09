@@ -35,26 +35,8 @@ const HeroCarousel = () => {
   }, [])
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[650px] md:h-[600px] lg:h-[650px] xl:h-[600px] 2xl:h-[650px] overflow-hidden">
-      {/* Navigation buttons */}
-      <div
-        className="absolute top-1/2 left-4 md:left-6 z-10 transform -translate-y-1/2 opacity-0 transition-opacity duration-500"
-        style={{ opacity: isLoaded ? 1 : 0 }}
-      >
-        <button className="prev-btn bg-white/10 backdrop-blur-sm hover:bg-white/30 text-white p-2 md:p-3 rounded-full transition-all duration-300 shadow-lg border border-white/20 group">
-          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 rotate-180 group-hover:scale-110 transition-transform duration-300" />
-        </button>
-      </div>
-      <div
-        className="absolute top-1/2 right-4 md:right-6 z-10 transform -translate-y-1/2 opacity-0 transition-opacity duration-500"
-        style={{ opacity: isLoaded ? 1 : 0 }}
-      >
-        <button className="next-btn bg-white/10 backdrop-blur-sm hover:bg-white/30 text-white p-2 md:p-3 rounded-full transition-all duration-300 shadow-lg border border-white/20 group">
-          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300" />
-        </button>
-      </div>
-
-      {/* Carousel */}
+    <div className="relative w-full h-[350px] sm:h-[650px] md:h-[600px] lg:h-[650px] xl:h-[600px] 2xl:h-[650px] overflow-hidden">
+    
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
@@ -89,7 +71,7 @@ const HeroCarousel = () => {
               <div className="container mx-auto h-full px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row h-full items-center justify-center lg:justify-between gap-6 lg:gap-8 py-8 lg:py-12">
                   {/* Left column - Text content with animations */}
-                  <div className="w-full lg:w-1/2 text-left space-y-4 lg:space-y-6 lg:pr-8 mt-8 lg:mt-0">
+                  <div className="w-full lg:w-1/2 text-left space-y-4 lg:space-y-6 lg:pr-8 mt-0 lg:mt-0">
                     <div
                       className="space-y-2 lg:space-y-3 opacity-0 transform translate-y-4 transition-all duration-1000 delay-300"
                       style={{ opacity: isLoaded ? 1 : 0, transform: isLoaded ? "translateY(0)" : "translateY(1rem)" }}
