@@ -35,7 +35,7 @@ function Page() {
   const [currentStep, setCurrentStep] = useState(1)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [bookingDetails, setBookingDetails] = useState(null)
-  
+
   // Shop addresses state
   const [shopAddresses, setShopAddresses] = useState([])
   const [loadingAddresses, setLoadingAddresses] = useState(false)
@@ -103,7 +103,7 @@ function Page() {
     try {
       // Fetch only active addresses
       const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/address/active`)
-      console.log("response for addresses",response)
+      console.log("response for addresses", response)
       if (response.data.success) {
         setShopAddresses(response.data.data)
       } else {
@@ -160,7 +160,7 @@ function Page() {
     setCurrentStep(prev => prev - 1)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (validateStep(2)) {
       // Generate booking number
@@ -168,8 +168,7 @@ function Page() {
 
       // Get selected clinic details
       const selectedClinic = shopAddresses.find(c => c._id === formData.clinic)
-
-      setBookingDetails({
+      const data = {
         ...formData,
         bookingNumber,
         deviceName: deviceInfo?.name,
@@ -178,9 +177,16 @@ function Page() {
         bookingDate: new Date().toLocaleDateString(),
         bookingTime: new Date().toLocaleTimeString(),
         clinicDetails: selectedClinic // Add clinic details for receipt
-      })
-
-      setShowConfirmation(true)
+      }
+      try {
+        const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/booking/`, data)
+        if (resp) {
+          setBookingDetails(data)
+          setShowConfirmation(true)
+        }
+      } catch (error) {
+         console.log("error in booking",error)
+      }
     }
   }
 
@@ -525,7 +531,7 @@ function Page() {
                           <StoreIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                           <h3 className="text-lg font-semibold text-gray-700 mb-2">No Clinics Available</h3>
                           <p className="text-gray-500 max-w-md mx-auto">
-                            We currently don't have any active clinic locations. 
+                            We currently don't have any active clinic locations.
                             Please choose the "Postal Repair" option or contact our support.
                           </p>
                           <div className="mt-4">
