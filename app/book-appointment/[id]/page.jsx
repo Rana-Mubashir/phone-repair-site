@@ -23,8 +23,13 @@ import {
   AlertCircle,
   X,
   Loader2,
-  Store as StoreIcon
+  Store as StoreIcon,
+  BookOpen,
+  ArrowRight
 } from 'lucide-react'
+import TimeSlotPicker from '../../../components/sections/bookAppointment/TimeSlotPicker'
+import CalendarPicker from '../../../components/sections/bookAppointment/CalendarPicker'
+import { toast } from 'sonner'
 
 function Page() {
   const { id } = useParams()
@@ -40,6 +45,7 @@ function Page() {
   const [shopAddresses, setShopAddresses] = useState([])
   const [loadingAddresses, setLoadingAddresses] = useState(false)
   const [addressesError, setAddressesError] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -79,7 +85,6 @@ function Page() {
     try {
       const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/repairoptions/getrepairdetail/${id}`)
       if (resp) {
-        console.log("response in book appointment", resp)
         const data = resp?.data?.data
         setData(data)
         setDeviceInfo({
@@ -163,10 +168,8 @@ function Page() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (validateStep(2)) {
-      // Generate booking number
+      setIsSubmitting(true)
       const bookingNumber = 'BK' + Date.now().toString().slice(-8) + Math.random().toString(36).substring(2, 8).toUpperCase()
-
-      // Get selected clinic details
       const selectedClinic = shopAddresses.find(c => c._id === formData.clinic)
       const data = {
         ...formData,
@@ -176,46 +179,106 @@ function Page() {
         price: deviceInfo?.price,
         bookingDate: new Date().toLocaleDateString(),
         bookingTime: new Date().toLocaleTimeString(),
-        clinicDetails: selectedClinic // Add clinic details for receipt
+        clinicDetails: selectedClinic
       }
       try {
         const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/booking/`, data)
         if (resp) {
           setBookingDetails(data)
-          setShowConfirmation(true)
+          setTimeout(() => {
+            toast.success("Your repair has been booked successfully. We'll send you a confirmation email shortly.");
+            setIsSubmitting(false)
+            setShowConfirmation(true)
+          }, 3000)
         }
       } catch (error) {
-         console.log("error in booking",error)
+        console.log("error in booking", error)
       }
     }
   }
 
+  // In your main component
   const downloadReceipt = async () => {
-    const receiptElement = document.getElementById('booking-receipt')
-    if (receiptElement) {
-      try {
-        const canvas = await html2canvas(receiptElement, {
-          scale: 2,
-          backgroundColor: '#ffffff',
-          logging: false,
-          windowWidth: receiptElement.scrollWidth,
-          windowHeight: receiptElement.scrollHeight
-        })
+    try {
+      // Create a temporary div with simplified receipt
+      const tempDiv = document.createElement('div');
+      tempDiv.style.backgroundColor = '#ffffff';
+      tempDiv.style.padding = '40px';
+      tempDiv.style.maxWidth = '800px';
+      tempDiv.style.margin = '0 auto';
+      tempDiv.style.fontFamily = 'Arial, sans-serif';
 
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'px',
-          format: [canvas.width * 0.75, canvas.height * 0.75]
-        })
+      // Build simplified receipt HTML
+      tempDiv.innerHTML = `
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="color: #333; font-size: 24px;">TechFix Pro</h1>
+        <p style="color: #666;">Premium Device Repairs</p>
+      </div>
+      
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #333; font-size: 20px;">Booking Confirmed!</h2>
+        <p style="color: #666;">Booking Number: <strong>${bookingDetails.bookingNumber}</strong></p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #333; margin-bottom: 15px;">Device Details</h3>
+        <p><strong>Device:</strong> ${bookingDetails.deviceName}</p>
+        <p><strong>Repair Type:</strong> ${bookingDetails.repairType}</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #333; margin-bottom: 15px;">Customer Details</h3>
+        <p><strong>Name:</strong> ${bookingDetails.firstName} ${bookingDetails.lastName}</p>
+        <p><strong>Email:</strong> ${bookingDetails.email}</p>
+        <p><strong>Phone:</strong> ${bookingDetails.phone}</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #333; margin-bottom: 15px;">Appointment Details</h3>
+        <p><strong>Date:</strong> ${bookingDetails.date}</p>
+        <p><strong>Time:</strong> ${bookingDetails.timeSlot}</p>
+        <p><strong>Location:</strong> ${bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails
+          ? bookingDetails.clinicDetails.name
+          : repairOptions?.find(opt => opt.id === bookingDetails.repairOption)?.label
+        }</p>
+      </div>
+      
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="color: #333; margin-bottom: 15px;">Payment Summary</h3>
+        <p><strong>Total:</strong> $${bookingDetails.price}</p>
+      </div>
+      
+      <div style="text-align: center; color: #999; font-size: 12px; margin-top: 30px;">
+        <p>This is a computer generated receipt. No signature required.</p>
+        <p>Booking Date: ${new Date().toLocaleString()}</p>
+      </div>
+    `;
 
-        const imgData = canvas.toDataURL('image/png')
-        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width * 0.75, canvas.height * 0.75)
-        pdf.save(`receipt-${bookingDetails.bookingNumber}.pdf`)
-      } catch (error) {
-        console.error('Error generating receipt:', error)
-      }
+      // Temporarily add to document
+      document.body.appendChild(tempDiv);
+
+      const canvas = await html2canvas(tempDiv, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
+
+      // Remove temporary div
+      document.body.removeChild(tempDiv);
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width * 0.75, canvas.height * 0.75]
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width * 0.75, canvas.height * 0.75);
+      pdf.save(`receipt-${bookingDetails.bookingNumber}.pdf`);
+    } catch (error) {
+      console.error('Error generating receipt:', error);
     }
-  }
+  };
 
   const repairOptions = [
     { id: 'clinic', label: 'At Clinic', icon: Store, description: 'Visit our repair center' },
@@ -278,35 +341,60 @@ function Page() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Progress Steps */}
+        {/* Enhanced Progress Steps */}
         <div className="mb-12">
-          <div className="flex justify-center items-center">
-            {[1, 2, 3].map((step) => (
-              <React.Fragment key={step}>
-                <div className="flex items-center">
-                  <div className={`
-                    w-10 h-[33px] md:h-10 rounded-full flex items-center justify-center font-semibold
-                    ${currentStep >= step
-                      ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white'
-                      : 'bg-gray-200 text-gray-600'}
-                  `}
-                  >
-                    {step}
-                  </div>
-                  <div className="ml-2">
-                    <p className=" text-xs md:text-sm text-gray-500">
-                      {step === 1 ? 'Personal Info' : step === 2 ? 'Repair Details' : 'Review & Pay'}
+          <div className="flex justify-between items-stretch gap-2 md:gap-4 max-w-2xl mx-auto px-4">
+            {[
+              { num: 1, label: 'Personal Info', icon: User },
+              { num: 2, label: 'Appointment', icon: Clock },
+              { num: 3, label: 'Confirm', icon: CheckCircle }
+            ].map((step, index) => {
+              const StepIcon = step.icon
+              const isActive = currentStep === step.num
+              const isCompleted = currentStep > step.num
+
+              return (
+                <React.Fragment key={step.num}>
+                  <div className="flex-1 flex flex-col items-center">
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        scale: isActive ? 1.1 : 1,
+                      }}
+                      className={`
+                        w-14 h-14 rounded-full flex items-center justify-center font-bold text-sm md:text-base mb-2 transition-all duration-300
+                        ${isActive
+                          ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white shadow-lg shadow-[#34c5f1]/40'
+                          : isCompleted
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-200 text-gray-600'}
+                      `}
+                    >
+                      {isCompleted ? (
+                        <CheckCircle className="w-6 h-6" />
+                      ) : (
+                        <StepIcon className="w-6 h-6" />
+                      )}
+                    </motion.div>
+                    <p className={`text-xs md:text-sm font-medium text-center ${isActive ? 'text-[#34c5f1]' : isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
+                      {step.label}
                     </p>
                   </div>
-                </div>
-                {step < 3 && (
-                  <div className={`
-                    w-24 h-1 mx-4 rounded
-                    ${currentStep > step ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7]' : 'bg-gray-200'}
-                  `}></div>
-                )}
-              </React.Fragment>
-            ))}
+
+                  {index < 2 && (
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: isCompleted ? 1 : 0 }}
+                      transition={{ duration: 0.4 }}
+                      className={`
+                        flex-1 h-1 rounded-full my-auto origin-left
+                        ${isCompleted ? 'bg-gradient-to-r from-[#34c5f1] to-[#a855f7]' : 'bg-gray-200'}
+                      `}
+                    />
+                  )}
+                </React.Fragment>
+              )
+            })}
           </div>
         </div>
 
@@ -587,56 +675,31 @@ function Page() {
                     </div>
                   )}
 
-                  {/* Date and Time */}
-                  <div className="grid md:grid-cols-2 gap-6 mb-8">
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">
-                        Appointment Date <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <input
-                          type="date"
-                          name="date"
-                          value={formData.date}
-                          onChange={handleInputChange}
-                          min={new Date().toISOString().split('T')[0]}
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none ${errors.date ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        />
-                      </div>
-                      {errors.date && (
-                        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" /> {errors.date}
-                        </p>
-                      )}
-                    </div>
+                  {/* Date and Time - Using improved components */}
+                  <div className="space-y-8 mb-8">
+                    <CalendarPicker
+                      value={formData.date}
+                      onChange={(date) => {
+                        setFormData(prev => ({ ...prev, date, timeSlot: '' }))
+                        if (errors.date) {
+                          setErrors(prev => ({ ...prev, date: '' }))
+                        }
+                      }}
+                      errors={errors.date}
+                    />
 
-                    <div>
-                      <label className="block text-gray-700 font-medium mb-2">
-                        Time Slot <span className="text-red-500">*</span>
-                      </label>
-                      <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <select
-                          name="timeSlot"
-                          value={formData.timeSlot}
-                          onChange={handleInputChange}
-                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#34c5f1] focus:outline-none appearance-none bg-white ${errors.timeSlot ? 'border-red-500' : 'border-gray-300'
-                            }`}
-                        >
-                          <option value="">Select a time slot</option>
-                          {timeSlots.map((slot) => (
-                            <option key={slot} value={slot}>{slot}</option>
-                          ))}
-                        </select>
-                      </div>
-                      {errors.timeSlot && (
-                        <p className="mt-1 text-sm text-red-500 flex items-center gap-1">
-                          <AlertCircle className="w-4 h-4" /> {errors.timeSlot}
-                        </p>
-                      )}
-                    </div>
+                    <TimeSlotPicker
+                      date={formData.date}
+                      value={formData.timeSlot}
+                      onChange={(slot) => {
+                        setFormData(prev => ({ ...prev, timeSlot: slot }))
+                        if (errors.timeSlot) {
+                          setErrors(prev => ({ ...prev, timeSlot: '' }))
+                        }
+                      }}
+                      errors={errors.timeSlot}
+                      disabled={!formData.date}
+                    />
                   </div>
 
                   {/* Notes */}
@@ -761,71 +824,137 @@ function Page() {
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    className="ml-auto px-4 md:px-8 py-2 md:py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center gap-2"
+                    disabled={isSubmitting}
+                    className="ml-auto px-4 md:px-8 py-2 md:py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <CheckCircle className="w-5 h-5 hidden md:block" />
-                    Confirm Booking
+                    {isSubmitting ? (
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8H4z"
+                          ></path>
+                        </svg>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-5 h-5 hidden md:block" />
+                        Confirm Booking
+                      </>
+                    )}
                   </button>
                 )}
               </div>
             </motion.div>
           </div>
 
-          {/* Right Column - Summary Card */}
+          {/* Right Column - Enhanced Summary Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-xl p-6 sticky top-24">
-              <div className="text-center mb-6">
-                <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
-                  <Smartphone className="w-12 h-12 text-[#34c5f1]" />
+            <motion.div
+              className="bg-white rounded-2xl shadow-xl overflow-hidden sticky top-24"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {/* Device Header */}
+              <div className="bg-gradient-to-r from-[#34c5f1]/10 to-[#a855f7]/10 p-6 border-b border-gray-200">
+                <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                  <Smartphone className="w-10 h-10 text-[#34c5f1]" />
                 </div>
-                <h3 className="font-bold text-xl text-gray-800">{deviceInfo?.name}</h3>
-                <p className="text-gray-600">{deviceInfo?.repairType}</p>
+                <h3 className="font-bold text-xl text-gray-800 text-center">{deviceInfo?.name}</h3>
+                <p className="text-gray-600 text-center text-sm">{deviceInfo?.repairType}</p>
               </div>
 
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center gap-3 text-sm">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
-                    <Wrench className="w-4 h-4 text-[#34c5f1]" />
+              <div className="p-6 space-y-6">
+                {/* Key Features */}
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Wrench className="w-4 h-4 text-[#34c5f1]" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800 text-sm">Certified Technicians</p>
+                      <p className="text-gray-500 text-xs">Expert repair service</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-gray-800">Certified Technicians</p>
-                    <p className="text-gray-500">Expert repair service</p>
+
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Shield className="w-4 h-4 text-[#a855f7]" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800 text-sm">Quality Parts</p>
+                      <p className="text-gray-500 text-xs">Genuine components</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-sm">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-[#a855f7]" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-800">Quality Parts</p>
-                    <p className="text-gray-500">Genuine components</p>
-                  </div>
-                </div>
-              </div>
+                {/* Appointment Preview */}
+                {(formData.date || formData.timeSlot || formData.clinic) && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="border-t pt-6 space-y-3"
+                  >
+                    <p className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-[#34c5f1]" />
+                      Your Appointment
+                    </p>
+                    {formData.date && (
+                      <div className="text-sm bg-blue-50 rounded-lg p-3 border border-blue-100">
+                        <p className="text-gray-600">Date</p>
+                        <p className="font-medium text-gray-800">{new Date(formData.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
+                      </div>
+                    )}
+                    {formData.timeSlot && (
+                      <div className="text-sm bg-purple-50 rounded-lg p-3 border border-purple-100">
+                        <p className="text-gray-600">Time</p>
+                        <p className="font-medium text-gray-800">{formData.timeSlot}</p>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
 
-              <div className="border-t border-gray-200 pt-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">Subtotal:</span>
-                  <span className="font-medium">${deviceInfo?.price}</span>
+                {/* Pricing */}
+                <div className="border-t pt-4 space-y-2">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium">${deviceInfo?.price}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">Service Fee</span>
+                    <span className="font-medium">$0</span>
+                  </div>
+                  <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t">
+                    <span>Total</span>
+                    <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">${deviceInfo?.price}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-600">Tax:</span>
-                  <span className="font-medium">$0</span>
-                </div>
-                <div className="flex justify-between items-center text-lg font-bold mt-4 pt-4 border-t border-gray-200">
-                  <span>Total:</span>
-                  <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">${deviceInfo?.price}</span>
-                </div>
-              </div>
 
-              <div className="mt-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-4">
-                <p className="text-xs text-gray-500 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-[#34c5f1]" />
-                  Your payment information is secure and encrypted
-                </p>
+                {/* Security Badge */}
+                <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-3 border border-gray-200">
+                  <p className="text-xs text-gray-600 flex items-center gap-2">
+                    <Shield className="w-3.5 h-3.5 text-[#34c5f1]" />
+                    <span>Secure & encrypted payment processing</span>
+                  </p>
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -850,209 +979,20 @@ function Page() {
               className="bg-white rounded-2xl max-w-4xl w-full max-h-[98vh] sm:max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div id="booking-receipt" className="relative p-4 sm:p-6 md:p-8">
-                {/* Header with Logo and Download Button */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                    </div>
-                    <div>
-                      <h1 className="text-lg sm:text-xl font-bold text-gray-800">TechFix Pro</h1>
-                      <p className="text-xs text-gray-500">Premium Device Repairs</p>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={downloadReceipt}
-                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-colors text-sm sm:text-base"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span className="sm:inline">Download Receipt</span>
-                  </button>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setShowConfirmation(false)
-                    router.push('/')
-                  }}
-                  className="absolute top-2 right-2 sm:top-4 sm:right-4 md:top-8 md:right-8 p-1 text-gray-400 hover:text-gray-600 bg-white rounded-full shadow-sm sm:shadow-none"
-                >
-                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
-
-                {/* Success Message */}
-                <div className="text-center mb-6 sm:mb-8">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">Booking Confirmed!</h2>
-                  <p className="text-sm sm:text-base text-gray-600 px-2">Your repair appointment has been successfully booked.</p>
-                </div>
-
-                {/* Receipt Content */}
-                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-[#34c5f1]/20 relative overflow-hidden">
-                  <div className="hidden sm:block absolute opacity-5 pointer-events-none">
-                    <Smartphone className="w-48 sm:w-64 h-48 sm:h-64 text-[#34c5f1]" />
-                  </div>
-
-                  {/* Booking Number */}
-                  <div className="text-center mb-4 sm:mb-6">
-                    <p className="text-xs sm:text-sm text-gray-600">Booking Number</p>
-                    <p className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-mono break-all">
-                      {bookingDetails.bookingNumber}
-                    </p>
-                  </div>
-
-                  {/* Device & Customer Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6">
-                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
-                      <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                        <Smartphone className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
-                        Device Details
-                      </h3>
-                      <div className="space-y-1.5 sm:space-y-2">
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
-                          <span className="text-xs sm:text-sm text-gray-500">Device:</span>
-                          <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.deviceName}</span>
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
-                          <span className="text-xs sm:text-sm text-gray-500">Repair Type:</span>
-                          <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.repairType}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
-                      <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                        <User className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
-                        Customer Details
-                      </h3>
-                      <div className="space-y-1.5 sm:space-y-2">
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
-                          <span className="text-xs sm:text-sm text-gray-500">Name:</span>
-                          <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.firstName} {bookingDetails.lastName}</span>
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
-                          <span className="text-xs sm:text-sm text-gray-500">Email:</span>
-                          <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.email}</span>
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
-                          <span className="text-xs sm:text-sm text-gray-500">Phone:</span>
-                          <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.phone}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Appointment Details */}
-                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm mb-4 sm:mb-6">
-                    <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                      <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
-                      Appointment Details
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                      <div>
-                        <p className="text-gray-500 text-xs sm:text-sm">Date</p>
-                        <p className="text-sm sm:text-base font-medium break-words">{bookingDetails.date}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs sm:text-sm">Time</p>
-                        <p className="text-sm sm:text-base font-medium break-words">{bookingDetails.timeSlot}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500 text-xs sm:text-sm">Location</p>
-                        <p className="text-sm sm:text-base font-medium break-words">
-                          {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails
-                            ? bookingDetails.clinicDetails.name
-                            : repairOptions.find(opt => opt.id === bookingDetails.repairOption)?.label}
-                        </p>
-                        {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails && (
-                          <p className="text-xs text-gray-500 mt-1">
-                            {bookingDetails.clinicDetails.address}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Price Summary */}
-                  <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
-                    <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
-                      <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
-                      Payment Summary
-                    </h3>
-                    <div className="space-y-1.5 sm:space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs sm:text-sm text-gray-500">{bookingDetails.repairType}:</span>
-                        <span className="text-sm sm:text-base font-medium">${bookingDetails.price}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs sm:text-sm text-gray-500">Service Fee:</span>
-                        <span className="text-sm sm:text-base font-medium">$0</span>
-                      </div>
-                      <div className="border-t border-gray-200 pt-2 mt-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm sm:text-base font-bold text-gray-800">Total Paid:</span>
-                          <span className="text-base sm:text-lg font-bold text-[#34c5f1]">${bookingDetails.price}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Footer Note */}
-                  <div className="mt-4 sm:mt-6 text-center text-xs text-gray-500">
-                    <p>This is a computer generated receipt. No signature required.</p>
-                    <p className="mt-1">Booking Date: {new Date().toLocaleString()}</p>
-                  </div>
-                </div>
-
-                {/* Contact Info */}
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="flex items-start sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#34c5f1] flex-shrink-0 mt-0.5 sm:mt-0" />
-                    <p className="text-xs sm:text-sm text-gray-600 break-words">
-                      Confirmation email sent to <span className="font-medium break-words">{bookingDetails.email}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex items-start sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
-                    <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#34c5f1] flex-shrink-0 mt-0.5 sm:mt-0" />
-                    <p className="text-xs sm:text-sm text-gray-600 break-words">
-                      We'll send you a reminder at <span className="font-medium break-words">{bookingDetails.phone}</span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={() => {
-                      setShowConfirmation(false)
-                      router.push('/')
-                    }}
-                    className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm sm:text-base"
-                  >
-                    Back to Home
-                  </button>
-                  <button
-                    onClick={() => window.print()}
-                    className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
-                  >
-                    Print
-                  </button>
-                  <button
-                    onClick={downloadReceipt}
-                    className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>Download Receipt</span>
-                  </button>
+              {/* Display receipt for viewing */}
+              <ReceiptContent
+                bookingDetails={bookingDetails}
+                showActions={true}
+                onDownload={downloadReceipt}
+                onClose={() => {
+                  setShowConfirmation(false)
+                  router.push('/');
+                }}
+              />
+              {/* Hidden receipt for PDF download */}
+              <div className="hidden">
+                <div id="receipt-for-download" className="bg-white p-8">
+                  <ReceiptContent bookingDetails={bookingDetails} showActions={false} />
                 </div>
               </div>
             </motion.div>
@@ -1064,3 +1004,217 @@ function Page() {
 }
 
 export default Page
+
+// ReceiptContent Component - Reusable for both display and download
+const ReceiptContent = ({ bookingDetails, showActions = true, onDownload, onClose }) => (
+  <div className="relative p-4 sm:p-6 md:p-8">
+    {/* Header - Only show if actions are enabled (view mode) */}
+    {showActions && (
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] rounded-lg flex items-center justify-center flex-shrink-0">
+            <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-800">TechFix Pro</h1>
+            <p className="text-xs text-gray-500">Premium Device Repairs</p>
+          </div>
+        </div>
+
+        <button
+          onClick={onDownload}
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-colors text-sm sm:text-base"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span className="sm:inline">Download Receipt</span>
+        </button>
+      </div>
+    )}
+
+    {/* Close button - Only show in view mode */}
+    {showActions && (
+      <button
+        onClick={onClose}
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 md:top-8 md:right-8 p-1 text-gray-400 hover:text-gray-600 bg-white rounded-full shadow-sm sm:shadow-none"
+      >
+        <X className="w-5 h-5 sm:w-6 sm:h-6" />
+      </button>
+    )}
+
+    {/* Success Message - Only show in view mode */}
+    {showActions && (
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+          <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">Booking Confirmed!</h2>
+        <p className="text-sm sm:text-base text-gray-600 px-2">Your repair appointment has been successfully booked.</p>
+      </div>
+    )}
+
+    {/* Receipt Content - Always visible */}
+    <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 sm:p-6 md:p-8 mb-6 border-2 border-[#34c5f1]/20 relative overflow-hidden">
+      <div className="hidden sm:block absolute opacity-5 pointer-events-none">
+        <Smartphone className="w-48 sm:w-64 h-48 sm:h-64 text-[#34c5f1]" />
+      </div>
+
+      {/* Booking Number */}
+      <div className="text-center mb-4 sm:mb-6">
+        <p className="text-xs sm:text-sm text-gray-600">Booking Number</p>
+        <p className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent font-mono break-all">
+          {bookingDetails.bookingNumber}
+        </p>
+      </div>
+
+      {/* Device & Customer Info */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6">
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
+          <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+            <Smartphone className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
+            Device Details
+          </h3>
+          <div className="space-y-1.5 sm:space-y-2">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+              <span className="text-xs sm:text-sm text-gray-500">Device:</span>
+              <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.deviceName}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+              <span className="text-xs sm:text-sm text-gray-500">Repair Type:</span>
+              <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.repairType}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
+          <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+            <User className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
+            Customer Details
+          </h3>
+          <div className="space-y-1.5 sm:space-y-2">
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+              <span className="text-xs sm:text-sm text-gray-500">Name:</span>
+              <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.firstName} {bookingDetails.lastName}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+              <span className="text-xs sm:text-sm text-gray-500">Email:</span>
+              <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.email}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+              <span className="text-xs sm:text-sm text-gray-500">Phone:</span>
+              <span className="text-sm sm:text-base font-medium break-words">{bookingDetails.phone}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Appointment Details */}
+      <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm mb-4 sm:mb-6">
+        <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+          <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
+          Appointment Details
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div>
+            <p className="text-gray-500 text-xs sm:text-sm">Date</p>
+            <p className="text-sm sm:text-base font-medium break-words">{bookingDetails.date}</p>
+          </div>
+          <div>
+            <p className="text-gray-500 text-xs sm:text-sm">Time</p>
+            <p className="text-sm sm:text-base font-medium break-words">{bookingDetails.timeSlot}</p>
+          </div>
+          <div>
+            <p className="text-gray-500 text-xs sm:text-sm">Location</p>
+            <p className="text-sm sm:text-base font-medium break-words">
+              {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails
+                ? bookingDetails.clinicDetails.name
+                : repairOptions.find(opt => opt.id === bookingDetails.repairOption)?.label}
+            </p>
+            {bookingDetails.repairOption === 'clinic' && bookingDetails.clinicDetails && (
+              <p className="text-xs text-gray-500 mt-1">
+                {bookingDetails.clinicDetails.address}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Price Summary */}
+      <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm">
+        <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+          <DollarSign className="w-3 h-3 sm:w-4 sm:h-4 text-[#34c5f1]" />
+          Payment Summary
+        </h3>
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs sm:text-sm text-gray-500">{bookingDetails.repairType}:</span>
+            <span className="text-sm sm:text-base font-medium">${bookingDetails.price}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xs sm:text-sm text-gray-500">Service Fee:</span>
+            <span className="text-sm sm:text-base font-medium">$0</span>
+          </div>
+          <div className="border-t border-gray-200 pt-2 mt-2">
+            <div className="flex justify-between items-center">
+              <span className="text-sm sm:text-base font-bold text-gray-800">Total Paid:</span>
+              <span className="text-base sm:text-lg font-bold text-[#34c5f1]">${bookingDetails.price}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Note */}
+      <div className="mt-4 sm:mt-6 text-center text-xs text-gray-500">
+        <p>This is a computer generated receipt. No signature required.</p>
+        <p className="mt-1">Booking Date: {new Date().toLocaleString()}</p>
+      </div>
+    </div>
+
+    {/* Contact Info - Only show in view mode */}
+    {showActions && (
+      <div className="space-y-3 sm:space-y-4">
+        <div className="flex items-start sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+          <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#34c5f1] flex-shrink-0 mt-0.5 sm:mt-0" />
+          <p className="text-xs sm:text-sm text-gray-600 break-words">
+            Confirmation email sent to <span className="font-medium break-words">{bookingDetails.email}</span>
+          </p>
+        </div>
+
+        <div className="flex items-start sm:items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+          <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#34c5f1] flex-shrink-0 mt-0.5 sm:mt-0" />
+          <p className="text-xs sm:text-sm text-gray-600 break-words">
+            We'll send you a reminder at <span className="font-medium break-words">{bookingDetails.phone}</span>
+          </p>
+        </div>
+      </div>
+    )}
+
+    {/* Action Buttons - Only show in view mode */}
+    {showActions && (
+      <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
+        <button
+          onClick={onClose}
+          className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm sm:text-base"
+        >
+          Back to Home
+        </button>
+        {/* <button
+          onClick={() => window.print()}
+          className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
+        >
+          Print
+        </button> */}
+        <button
+          onClick={onDownload}
+          className="w-full sm:flex-1 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-r from-[#34c5f1] to-[#a855f7] text-white rounded-lg hover:from-[#2ba8d0] hover:to-[#9333ea] transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>Download Receipt</span>
+        </button>
+      </div>
+    )}
+  </div>
+);

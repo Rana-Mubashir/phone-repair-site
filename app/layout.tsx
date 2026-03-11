@@ -3,6 +3,8 @@ import { Noto_Sans } from "next/font/google";
 import Header from '../components/layout/header/Main'
 import Footer from '../components/layout/footer/Main'
 import "./globals.css";
+import { Toaster } from "sonner";
+
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",
@@ -24,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${notoSans.variable} antialiased`}>
         <Header />
+        <Toaster position="top-right" richColors />
         {children}
         <Footer />
       </body>
