@@ -1,6 +1,8 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect, useRef, useDeferredValue } from 'react';
 import { FiMessageCircle, FiX, FiSend, FiMinimize2, FiMaximize2, FiUser, FiHelpCircle } from 'react-icons/fi';
+import { v4 as uuid } from 'uuid';
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +56,37 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
+    setMessages([{
+      _id: 1,
+      message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
+      role: 'bot',
+      timestamp: new Date()
+    }])
+    const sessionId = localStorage.getItem("chat_session") || uuid();
+    localStorage.setItem("chat_session", sessionId);
+    getPrevMessages(sessionId)
+  }, [])
+
+  const getPrevMessages = async (sessionId) => {
+    try {
+
+      const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/${sessionId}`)
+      console.log("resp for prev messages", resp)
+      if (resp) {
+        setMessages((prev) => [{
+          _id: 1,
+          message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
+          role: 'bot',
+          timestamp: new Date()
+        }, ...(resp?.data?.chat?.messages || [])])
+      }
+
+    } catch (error) {
+      console.log("error in sending messages", error)
+    }
+  }
+
+  useEffect(() => {
     // Show chatbot icon after scrolling past hero section
     const handleScroll = () => {
       const heroSection = document.querySelector('section:first-child, [class*="hero"]');
@@ -61,7 +94,7 @@ const Chatbot = () => {
         const heroHeight = heroSection.offsetHeight;
         const scrollPosition = window.scrollY;
         setShowIcon(scrollPosition > heroHeight - 100);
-        
+
         // Reset notification when icon appears
         if (scrollPosition > heroHeight - 100 && !isOpen) {
           setShowNotification(true);
@@ -98,62 +131,37 @@ const Chatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Add initial welcome message
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([
-        {
-          id: 1,
-          text: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
-          sender: 'bot',
-          timestamp: new Date()
-        }
-      ]);
+  const handleSendMessage = async () => {
+    const sessionId = localStorage.getItem('chat_session')
+    const data = {
+      sessionId,
+      message: inputMessage,
+      role: 'user'
     }
-  }, []);
+    try {
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
-
-    // Add user message
-    const userMessage = {
-      id: Date.now(),
-      text: inputMessage,
-      sender: 'user',
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsTyping(true);
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = generateResponse(inputMessage);
-      const botMessage = {
-        id: Date.now() + 1,
-        text: botResponse,
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
-      setIsTyping(false);
-      
-      // Increment unread count if chat is minimized or closed
-      if (!isOpen || isMinimized) {
-        setUnreadCount(prev => prev + 1);
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat`, data)
+      console.log("response for send message", resp)
+      if (resp) {
+        setInputMessage('');
+        setIsTyping(true);
+        setMessages((prev) => [...prev, ...(resp?.data?.messages || [])])
       }
-    }, 1000);
-  };
+
+    } catch (error) {
+      console.log("error in sending message", error)
+    }
+  }
 
   const generateResponse = (userInput) => {
     const input = userInput.toLowerCase();
-    
+
     for (const [key, value] of Object.entries(predefinedResponses)) {
       if (key !== 'default' && value.keywords.some(keyword => input.includes(keyword))) {
         return value.response;
       }
     }
-    
+
     return predefinedResponses.default.response;
   };
 
@@ -192,12 +200,11 @@ const Chatbot = () => {
         {/* Ripple Effect */}
         <div className="absolute inset-0 rounded-full animate-ping-slow bg-blue-400 opacity-75"></div>
         <div className="absolute inset-0 rounded-full animate-pulse-slow bg-blue-300 opacity-50"></div>
-        
+
         {/* Main Button */}
-        <button 
-          className={`relative p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 focus:outline-none group ${
-            isOpen ? 'bg-red-500 hover:bg-red-600 rotate-90' : 'animate-float'
-          }`}
+        <button
+          className={`relative p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 focus:outline-none group ${isOpen ? 'bg-red-500 hover:bg-red-600 rotate-90' : 'animate-float'
+            }`}
           onClick={toggleChat}
           aria-label="Open chat"
         >
@@ -205,7 +212,7 @@ const Chatbot = () => {
           <div className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}>
             {isOpen ? <FiX size={24} /> : <FiMessageCircle size={24} />}
           </div>
-          
+
           {/* Tooltip */}
           {!isOpen && (
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
@@ -214,7 +221,7 @@ const Chatbot = () => {
             </div>
           )}
         </button>
-        
+
         {/* Notification Badge */}
         {!isOpen && showNotification && (
           <div className="absolute -top-2 -right-2 animate-bounce">
@@ -226,7 +233,7 @@ const Chatbot = () => {
             </div>
           </div>
         )}
-        
+
         {/* Unread Count Badge */}
         {!isOpen && unreadCount > 0 && (
           <div className="absolute -top-2 -right-2 animate-pulse">
@@ -239,9 +246,8 @@ const Chatbot = () => {
 
       {/* Chat Modal with Entrance Animation */}
       {isOpen && (
-        <div className={`fixed bottom-24 right-6 z-50 bg-white rounded-2xl shadow-2xl transition-all duration-500 transform flex flex-col ${
-          isMinimized ? 'w-80 h-16' : 'w-96 h-[600px] animate-slide-up'
-        }`}>
+        <div className={`fixed bottom-24 right-6 z-50 bg-white rounded-2xl shadow-2xl transition-all duration-500 transform flex flex-col ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px] animate-slide-up'
+          }`}>
           {/* Header */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-2xl p-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -257,13 +263,13 @@ const Chatbot = () => {
               </div>
             </div>
             <div className="flex space-x-2">
-              <button 
+              <button
                 onClick={toggleMinimize}
                 className="hover:bg-white/20 rounded-lg p-1 transition-colors"
               >
                 {isMinimized ? <FiMaximize2 size={18} /> : <FiMinimize2 size={18} />}
               </button>
-              <button 
+              <button
                 onClick={toggleChat}
                 className="hover:bg-white/20 rounded-lg p-1 transition-colors"
               >
@@ -278,36 +284,36 @@ const Chatbot = () => {
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                 {messages.map((message, index) => (
                   <div
-                    key={message.id}
-                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
+                    key={message._id}
+                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <div className={`flex items-start space-x-2 max-w-[80%] ${
-                      message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                    }`}>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        message.sender === 'user' 
-                          ? 'bg-blue-600' 
-                          : 'bg-gray-300'
+                    <div className={`flex items-start space-x-2 max-w-[80%] ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
                       }`}>
-                        {message.sender === 'user' 
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === 'user'
+                        ? 'bg-blue-600'
+                        : 'bg-gray-300'
+                        }`}>
+                        {message.role === 'user'
                           ? <FiUser size={14} className="text-white" />
                           : <FiHelpCircle size={14} className="text-gray-600" />
                         }
                       </div>
                       <div>
-                        <div className={`rounded-2xl px-4 py-2 ${
-                          message.sender === 'user'
-                            ? 'bg-blue-600 text-white transform hover:scale-105 transition-transform'
-                            : 'bg-white border border-gray-200 text-gray-800'
-                        }`}>
-                          <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                        <div className={`rounded-2xl px-4 py-2 ${message.role === 'user'
+                          ? 'bg-blue-600 text-white transform hover:scale-105 transition-transform'
+                          : 'bg-white border border-gray-200 text-gray-800'
+                          }`}>
+                          <p className="text-sm whitespace-pre-wrap">{message.message}</p>
                         </div>
-                        <p className={`text-xs mt-1 text-gray-400 ${
-                          message.sender === 'user' ? 'text-right' : 'text-left'
-                        }`}>
-                          {formatTime(message.timestamp)}
-                        </p>
+                        {
+                          message.createdAt && (
+                            <p className={`text-xs mt-1 text-gray-400 ${message.rle === 'user' ? 'text-right' : 'text-left'
+                              }`}>
+                              {formatTime(message?.createdAt)}
+                            </p>
+                          )
+                        }
                       </div>
                     </div>
                   </div>
