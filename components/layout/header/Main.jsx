@@ -8,11 +8,7 @@ import {
   Instagram,
   Twitter,
   Youtube,
-  Home,
-  Clock,
-  Mail,
   Phone,
-  Search,
   Menu,
   X,
 } from "lucide-react";
@@ -35,10 +31,6 @@ export default function Header() {
       name: "Repair & Services",
       link: 'repair-services'
     },
-    // {
-    //   name: "Stories",
-    //   link: 'stories'
-    // },
     {
       name: "About Us",
       link: 'about-us'
@@ -50,9 +42,9 @@ export default function Header() {
   ]
 
   return (
-    <header className="w-full shadow-md">
-      {/* Top Bar */}
-      <div className="bg-gradient-to-r from-blue-400 to-purple-500 px-6 py-3 flex flex-col md:flex-row      justify-between items-center ">
+    <header className="w-full shadow-md bg-white">
+      {/* Top Bar - Now with dark text on light background */}
+      <div className="bg-gradient-to-r from-blue-400 to-purple-500 px-6 py-3 flex flex-col md:flex-row justify-between items-center">
         <p className="text-white font-medium text-center text-sm md:text-base">
           Welcome to Tech Repair - Your Trusted Repair Shop
         </p>
@@ -65,108 +57,96 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Middle Section */}
-      <div className=" hidden md:flex px-6 md:px-12 py-3  flex-col md:flex-row justify-between items-center gap-6">
-        <Link href="/">
-          <Image
-            src="https://ik.imagekit.io/e6xhkk2f6/phoneRepairLogo.png"
-            alt="RepairPlus Logo"
-            width={180}
-            height={100}
-            className="h-auto"
-          />
-        </Link>
-        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-          {[
-            { icon: Home, title: "321, Breaking Street", desc: "New York, USA 10002" },
-            { icon: Clock, title: "Opening Time", desc: "Mon - Sat: 09.00 to 18.00" },
-            { icon: Mail, title: "Mail Us", desc: "Support@Repairplus.com" },
-          ].map((item, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <div className="p-3 border-2 border-gray-300 rounded-full bg-gray-100 hover:bg-[#34c5f1] transition-colors">
-                <item.icon size={22} className="text-gray-700 hover:text-white" />
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-800">{item.title}</h3>
-                <p className="text-sm text-gray-500">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Main Navigation Bar - White background with dark text */}
+      <div className="bg-white relative w-full border-b border-gray-200">
+        <div className="px-6 md:px-12 flex items-center justify-between h-[63px]">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src="https://ik.imagekit.io/e6xhkk2f6/phoneRepairLogo.png"
+              alt="RepairPlus Logo"
+              width={180}
+              height={100}
+              className="h-auto w-auto"
+              priority
+            />
+          </Link>
 
-      {/* Navigation Bar */}
-      <div className="bg-[#152344] relative w-full">
-        <div className="px-6 md:px-12 flex items-center justify-between h-16">
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-white p-3 focus:outline-none"
+            className="md:hidden text-gray-700 p-3 focus:outline-none hover:text-blue-500"
             onClick={toggleMobileMenu}
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex gap-6">
-            <Link href='/' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
+          {/* Desktop Navigation - Dark text */}
+          <nav className="hidden md:flex gap-8 items-center">
+            <Link href='/' className="text-gray-700 text-lg font-medium hover:text-blue-500 transition-colors">
               Home
             </Link>
-            <div className=""
+            <div
+              className="relative"
               onMouseEnter={() => setISDropDown(true)}
               onMouseLeave={() => setISDropDown(false)}
             >
-              <Link href='/repair-services' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
+              <Link href='/repair-services' className="text-gray-700 text-lg font-medium hover:text-blue-500 transition-colors">
                 Repair & Services
               </Link>
-              {
+              {/* {
                 isDropdown && (
                   <RepairServicesDropDown />
                 )
-              }
+              } */}
             </div>
-            {/* <Link href='/stories' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
-              Stories
-            </Link> */}
-            <Link href='/about-us' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
+            <Link href='/about-us' className="text-gray-700 text-lg font-medium hover:text-blue-500 transition-colors">
               About Us
             </Link>
-            <Link href='/contact-us' className="text-white text-lg font-medium hover:text-[#34c5f1] transition-colors">
+            <Link href='/contact-us' className="text-gray-700 text-lg font-medium hover:text-blue-500 transition-colors">
               Contact Us
             </Link>
           </nav>
 
-          {/* Contact & Search */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-[#34c5f1]">
+          {/* Contact Info - Dark text */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-2 text-blue-500">
               <Phone size={24} className="animate-pulse" />
               <div>
-                <p className="text-xs font-medium text-[#34c5f1]">Customer Care</p>
-                <p className="text-white font-bold">1800-56-78-9012</p>
+                <p className="text-xs font-medium text-gray-500">Customer Care</p>
+                <p className="text-gray-800 font-bold">+44 7700 900123</p>
               </div>
             </div>
-            {/* <button className="bg-[#34c5f1] text-white p-3 rounded-full hover:bg-[#1e90ff] transition-colors hidden md:block">
-              <Search size={20} />
-            </button> */}
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
+        {/* Mobile Navigation Menu - White background with dark text */}
         <div
-          className={`absolute top-full left-0 w-full bg-[#152344] z-50 transition-all duration-300 ease-in-out ${mobileMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
-            } overflow-hidden md:hidden`}
+          className={`absolute top-full left-0 w-full bg-white z-50 transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          } overflow-hidden md:hidden border-b border-gray-200 shadow-lg`}
         >
-          <div className="flex flex-col text-center py-4 border-t border-[#34c5f1]/20">
+          <div className="flex flex-col text-center py-4 border-t border-gray-200">
             {menuItems.map((item, index) => (
               <Link
                 key={index}
                 href={`/${item.link}`}
-                className="text-white py-3 font-medium hover:bg-[#34c5f1]/20 transition-colors"
+                className="text-gray-700 py-3 font-medium hover:bg-gray-50 hover:text-blue-500 transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
+            {/* Mobile Contact Info */}
+            <div className="py-4 border-t border-gray-200 mt-2">
+              <div className="flex items-center justify-center gap-2 text-blue-500">
+                <Phone size={20} />
+                <div>
+                  <p className="text-xs font-medium text-gray-500">Customer Care</p>
+                  <p className="text-gray-800 font-bold">1800-56-78-9012</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
