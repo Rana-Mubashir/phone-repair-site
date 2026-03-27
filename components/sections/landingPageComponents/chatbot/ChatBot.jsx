@@ -16,9 +16,8 @@ const Chatbot = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const socketRef = useRef(null); // Changed: use ref for socket
+  const socketRef = useRef(null); 
 
-  // Predefined messages and responses
   const predefinedResponses = {
     greeting: {
       keywords: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon'],
@@ -57,21 +56,17 @@ const Chatbot = () => {
     }
   };
 
-  // Fixed: Combined socket initialization into single useEffect
   useEffect(() => {
     const sessionId = localStorage.getItem("chat_session") || uuid();
     localStorage.setItem("chat_session", sessionId);
     
-    // Initialize socket
     socketRef.current = io(process.env.NEXT_PUBLIC_SERVER_URL);
     
-    // Join room after connection
     socketRef.current.on("connect", () => {
       console.log("Socket connected");
       socketRef.current.emit("join", sessionId);
     });
     
-    // Listen for messages
     socketRef.current.on("receive_message", (data) => {
       console.log("Received message:", data);
       setMessages((prev) => [...prev, {
@@ -86,16 +81,14 @@ const Chatbot = () => {
       }
     });
     
-    // Load previous messages
     getPrevMessages(sessionId);
     
-    // Cleanup
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
     };
-  }, []); // Empty dependency array
+  }, []); 
 
   const getPrevMessages = async (sessionId) => {
     try {
@@ -131,7 +124,6 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    // Show chatbot icon after scrolling past hero section
     const handleScroll = () => {
       const heroSection = document.querySelector('section:first-child, [class*="hero"]');
       if (heroSection) {
@@ -139,7 +131,6 @@ const Chatbot = () => {
         const scrollPosition = window.scrollY;
         setShowIcon(scrollPosition > heroHeight - 100);
 
-        // Reset notification when icon appears
         if (scrollPosition > heroHeight - 100 && !isOpen) {
           setShowNotification(true);
         }
