@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect, useRef, useDeferredValue } from 'react';
 import { FiMessageCircle, FiX, FiSend, FiMinimize2, FiMaximize2, FiUser, FiHelpCircle } from 'react-icons/fi';
 import { v4 as uuid } from 'uuid';
+import { io } from "socket.io-client";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ const Chatbot = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const socketRef = useRef(null); // Changed: use ref for socket
 
   // Predefined messages and responses
   const predefinedResponses = {
@@ -55,36 +57,78 @@ const Chatbot = () => {
     }
   };
 
+  // Fixed: Combined socket initialization into single useEffect
   useEffect(() => {
-    setMessages([{
-      _id: 1,
-      message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
-      role: 'bot',
-      timestamp: new Date()
-    }])
     const sessionId = localStorage.getItem("chat_session") || uuid();
     localStorage.setItem("chat_session", sessionId);
-    getPrevMessages(sessionId)
-  }, [])
+    
+    // Initialize socket
+    socketRef.current = io(process.env.NEXT_PUBLIC_SERVER_URL);
+    
+    // Join room after connection
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected");
+      socketRef.current.emit("join", sessionId);
+    });
+    
+    // Listen for messages
+    socketRef.current.on("receive_message", (data) => {
+      console.log("Received message:", data);
+      setMessages((prev) => [...prev, {
+        _id: Date.now(),
+        message: data.message,
+        role: data.role,
+        timestamp: new Date()
+      }]);
+      
+      if (!isOpen) {
+        setUnreadCount((prev) => prev + 1);
+      }
+    });
+    
+    // Load previous messages
+    getPrevMessages(sessionId);
+    
+    // Cleanup
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []); // Empty dependency array
 
   const getPrevMessages = async (sessionId) => {
     try {
-
-      const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/${sessionId}`)
-      console.log("resp for prev messages", resp)
-      if (resp) {
-        setMessages((prev) => [{
+      const resp = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat/${sessionId}`);
+      console.log("resp for prev messages", resp);
+      if (resp?.data?.chat?.messages) {
+        setMessages([
+          {
+            _id: 1,
+            message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
+            role: 'bot',
+            timestamp: new Date()
+          },
+          ...(resp?.data?.chat?.messages || [])
+        ]);
+      } else {
+        setMessages([{
           _id: 1,
           message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
           role: 'bot',
           timestamp: new Date()
-        }, ...(resp?.data?.chat?.messages || [])])
+        }]);
       }
-
     } catch (error) {
-      console.log("error in sending messages", error)
+      console.log("error in getting messages", error);
+      setMessages([{
+        _id: 1,
+        message: "Hi there! 👋 I'm your virtual assistant. How can I help you today?",
+        role: 'bot',
+        timestamp: new Date()
+      }]);
     }
-  }
+  };
 
   useEffect(() => {
     // Show chatbot icon after scrolling past hero section
@@ -132,26 +176,31 @@ const Chatbot = () => {
   };
 
   const handleSendMessage = async () => {
-    const sessionId = localStorage.getItem('chat_session')
+    if (!inputMessage.trim()) return;
+    
+    const sessionId = localStorage.getItem('chat_session');
+    const messageText = inputMessage;
+    
+    setInputMessage('');
+    
     const data = {
       sessionId,
-      message: inputMessage,
+      message: messageText,
       role: 'user'
-    }
+    };
+    
     try {
-
-      const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat`, data)
-      console.log("response for send message", resp)
+      const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat`, data);
       if (resp) {
-        setInputMessage('');
-        setIsTyping(true);
-        setMessages((prev) => [...prev, ...(resp?.data?.messages || [])])
+        // Fixed: Use socketRef.current instead of socket
+        if (socketRef.current) {
+          socketRef.current.emit("send_message", data);
+        }
       }
-
     } catch (error) {
-      console.log("error in sending message", error)
+      console.log("error in sending message", error);
     }
-  }
+  };
 
   const generateResponse = (userInput) => {
     const input = userInput.toLowerCase();
@@ -307,10 +356,10 @@ const Chatbot = () => {
                           <p className="text-sm whitespace-pre-wrap">{message.message}</p>
                         </div>
                         {
-                          message.createdAt && (
-                            <p className={`text-xs mt-1 text-gray-400 ${message.rle === 'user' ? 'text-right' : 'text-left'
+                          message.timestamp && (
+                            <p className={`text-xs mt-1 text-gray-400 ${message.role === 'user' ? 'text-right' : 'text-left'
                               }`}>
-                              {formatTime(message?.createdAt)}
+                              {formatTime(message?.timestamp)}
                             </p>
                           )
                         }
