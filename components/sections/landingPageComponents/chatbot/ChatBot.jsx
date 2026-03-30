@@ -157,7 +157,6 @@ const Chatbot = () => {
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
-      // Reset unread count when chat opens
       setUnreadCount(0);
     }
   }, [isOpen, isMinimized]);
@@ -183,7 +182,6 @@ const Chatbot = () => {
     try {
       const resp = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chat`, data);
       if (resp) {
-        // Fixed: Use socketRef.current instead of socket
         if (socketRef.current) {
           socketRef.current.emit("send_message", data);
         }
@@ -191,18 +189,6 @@ const Chatbot = () => {
     } catch (error) {
       console.log("error in sending message", error);
     }
-  };
-
-  const generateResponse = (userInput) => {
-    const input = userInput.toLowerCase();
-
-    for (const [key, value] of Object.entries(predefinedResponses)) {
-      if (key !== 'default' && value.keywords.some(keyword => input.includes(keyword))) {
-        return value.response;
-      }
-    }
-
-    return predefinedResponses.default.response;
   };
 
   const handleKeyPress = (e) => {
@@ -238,12 +224,12 @@ const Chatbot = () => {
       {/* Floating Chat Button with Animations */}
       <div className="fixed bottom-6 right-6 z-50">
         {/* Ripple Effect */}
-        <div className="absolute inset-0 rounded-full animate-ping-slow bg-blue-400 opacity-75"></div>
+        <div className="absolute inset-0 rounded-full animate-ping-slow bg-purple-400 opacity-75"></div>
         <div className="absolute inset-0 rounded-full animate-pulse-slow bg-blue-300 opacity-50"></div>
 
         {/* Main Button */}
         <button
-          className={`relative p-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 focus:outline-none group ${isOpen ? 'bg-red-500 hover:bg-red-600 rotate-90' : 'animate-float'
+          className={`relative p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-110 focus:outline-none group ${isOpen ? 'bg-red-500 hover:bg-red-600 rotate-90' : 'animate-float'
             }`}
           onClick={toggleChat}
           aria-label="Open chat"
@@ -289,7 +275,7 @@ const Chatbot = () => {
         <div className={`fixed bottom-24 right-6 z-50 bg-white rounded-2xl shadow-2xl transition-all duration-500 transform flex flex-col ${isMinimized ? 'w-80 h-16' : 'w-96 h-[600px] animate-slide-up'
           }`}>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-2xl p-4 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-t-2xl p-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
                 <FiMessageCircle size={20} />
@@ -298,7 +284,7 @@ const Chatbot = () => {
                 <h3 className="font-semibold text-white">Support Chat</h3>
                 <p className="text-xs text-blue-100 flex items-center">
                   <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
-                  Online • Usually replies in minutes
+                  Online
                 </p>
               </div>
             </div>
@@ -331,7 +317,7 @@ const Chatbot = () => {
                     <div className={`flex items-start space-x-2 max-w-[80%] ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
                       }`}>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === 'user'
-                        ? 'bg-blue-600'
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600'
                         : 'bg-gray-300'
                         }`}>
                         {message.role === 'user'
@@ -341,7 +327,7 @@ const Chatbot = () => {
                       </div>
                       <div>
                         <div className={`rounded-2xl px-4 py-2 ${message.role === 'user'
-                          ? 'bg-blue-600 text-white transform hover:scale-105 transition-transform'
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white transform hover:scale-105 transition-transform'
                           : 'bg-white border border-gray-200 text-gray-800'
                           }`}>
                           <p className="text-sm whitespace-pre-wrap">{message.message}</p>
@@ -393,7 +379,7 @@ const Chatbot = () => {
                   <button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
-                    className="px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     <FiSend size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
