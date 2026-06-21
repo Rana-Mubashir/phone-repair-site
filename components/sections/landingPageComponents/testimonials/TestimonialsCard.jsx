@@ -1,75 +1,83 @@
-// TestimonialsCard.jsx
-"use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { FaQuoteLeft, FaStar, FaMobile, FaWrench } from "react-icons/fa";
-import { MdVerified } from "react-icons/md";
+"use client"
 
-const TestimonialsCard = ({ name, position, image, review, rating, device, service, date }) => {
+import { motion } from "framer-motion"
+import { Star, MapPin } from "lucide-react"
+
+const TestimonialsCard = ({
+  name,
+  initials,
+  location,
+  review,
+  rating,
+  device,
+  service,
+  date,
+  isActive = false,
+}) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
-      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 relative border border-gray-100"
+    <motion.article
+      layout
+      className={`group relative flex h-full min-h-[220px] cursor-pointer flex-col rounded-2xl border p-5 transition-all duration-300 sm:p-6 ${
+        isActive
+          ? "scale-[1.02] border-[#34c5f1]/40 bg-white shadow-xl shadow-[#34c5f1]/10"
+          : "border-gray-100/90 bg-white/90 shadow-sm hover:border-[#34c5f1]/25 hover:shadow-md"
+      }`}
     >
-      {/* Verified Badge */}
-      <div className="absolute top-4 right-4">
-        <div className="flex items-center bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">
-          <MdVerified className="mr-1" />
-          Verified
+      <div
+        className={`absolute left-0 top-6 h-10 w-1 rounded-r-full bg-gradient-to-b from-[#34c5f1] to-[#a855f7] transition-opacity duration-300 ${
+          isActive ? "opacity-100" : "opacity-0 group-hover:opacity-60"
+        }`}
+      />
+
+      <div className="mb-4 flex items-center justify-between gap-3 pl-2">
+        <div className="flex items-center gap-1">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              className={`h-3.5 w-3.5 ${
+                i < rating ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"
+              }`}
+            />
+          ))}
         </div>
+        <span className="text-[11px] font-medium uppercase tracking-wide text-gray-400">
+          {date}
+        </span>
       </div>
 
-      {/* Customer Info */}
-      <div className="flex items-start space-x-4">
-        <img
-          src={image}
-          alt={name}
-          className="w-14 h-14 rounded-full object-cover border-2 border-blue-100"
-          loading="lazy"
-        />
-        <div className="flex-1">
-          <h3 className="font-semibold text-gray-900">{name}</h3>
-          <p className="text-sm text-gray-500">{position}</p>
-          
-          {/* Service Details */}
-          <div className="flex flex-wrap gap-2 mt-2">
-            <span className="inline-flex items-center text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
-              <FaMobile className="mr-1 text-xs" />
-              {device}
-            </span>
-            <span className="inline-flex items-center text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-              <FaWrench className="mr-1 text-xs" />
-              {service}
-            </span>
-          </div>
-        </div>
+      <blockquote className="mb-5 line-clamp-4 flex-1 pl-2 text-sm leading-relaxed text-gray-600">
+        &ldquo;{review}&rdquo;
+      </blockquote>
+
+      <div className="mb-4 flex flex-wrap gap-1.5 pl-2">
+        <span className="rounded-md bg-[#34c5f1]/10 px-2.5 py-1 text-[11px] font-semibold text-[#1ab5e4]">
+          {device}
+        </span>
+        <span className="rounded-md bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-600">
+          {service}
+        </span>
       </div>
 
-      {/* Review Content */}
-      <div className="mt-4">
-        <div className="flex items-center mb-2">
-          <div className="flex text-yellow-400">
-            {[...Array(5)].map((_, i) => (
-              <FaStar
-                key={i}
-                className={`text-sm ${i < rating ? "text-yellow-400" : "text-gray-300"}`}
-              />
-            ))}
-          </div>
-          <span className="text-xs text-gray-400 ml-2">{date}</span>
+      <div className="flex items-center gap-3 border-t border-gray-100 pt-4 pl-2">
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold text-white transition-all duration-300 ${
+            isActive
+              ? "bg-gradient-to-br from-[#34c5f1] to-[#a855f7] shadow-md shadow-[#34c5f1]/20"
+              : "bg-gradient-to-br from-gray-400 to-gray-500 group-hover:from-[#34c5f1] group-hover:to-[#a855f7]"
+          }`}
+        >
+          {initials}
         </div>
-        
-        <p className="text-gray-600 text-sm leading-relaxed">
-          <FaQuoteLeft className="inline text-gray-300 mr-1 text-xs" />
-          {review}
-        </p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-gray-900">{name}</p>
+          <p className="flex items-center gap-1 truncate text-xs text-gray-500">
+            <MapPin className="h-3 w-3 shrink-0" />
+            {location}
+          </p>
+        </div>
       </div>
-    </motion.div>
-  );
-};
+    </motion.article>
+  )
+}
 
-export default TestimonialsCard;
+export default TestimonialsCard

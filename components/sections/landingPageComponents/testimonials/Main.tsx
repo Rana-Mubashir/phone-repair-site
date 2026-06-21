@@ -1,118 +1,137 @@
-// Main.jsx
 "use client"
-import React from 'react'
-import TestimonialsCard from './TestimonialsCard'
-import { motion } from 'framer-motion'
-import { FaShieldAlt, FaClock,FaStar } from 'react-icons/fa';
+
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
+import { Star } from "lucide-react"
+import CountUp from "react-countup"
+import RatingSummary from "./RatingSummary"
+import FeaturedTestimonial from "./FeaturedTestimonial"
+import TestimonialsCarousel from "./TestimonialsCarousel"
+import { testimonials, reviewStats } from "@/data/testimonials"
+
 function Main() {
-    return (
-        <section className="bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                {/* Section Header */}
-                <div className="text-center mb-12">
-                    <motion.h2 
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-                    >
-                        What Our Customers Say
-                    </motion.h2>
-                    <motion.p 
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg text-gray-600 max-w-2xl mx-auto"
-                    >
-                        Join thousands of satisfied customers who trust us with their devices
-                    </motion.p>
-                </div>
+  const [activeIndex, setActiveIndex] = useState(0)
+  const { ref: sectionRef, inView } = useInView({ triggerOnce: true, threshold: 0.06 })
 
-                {/* Testimonials Grid */}
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                    <TestimonialsCard
-                        name="Michael Chen"
-                        position="iPhone 14 Pro Customer"
-                        image="https://randomuser.me/api/portraits/men/32.jpg"
-                        review="My iPhone fell in water and stopped working. They fixed it in just 2 hours! The screen protector installation was perfect too. Very reasonable prices."
-                        rating={5}
-                        device="iPhone 14 Pro"
-                        service="Water Damage Repair"
-                        date="2 days ago"
-                    />
-                    <TestimonialsCard
-                        name="Sarah Johnson"
-                        position="Samsung S23 Ultra Customer"
-                        image="https://randomuser.me/api/portraits/women/44.jpg"
-                        review="Battery was draining quickly on my Samsung. They replaced it with an original battery and now it lasts all day. Great warranty policy too!"
-                        rating={5}
-                        device="Samsung S23 Ultra"
-                        service="Battery Replacement"
-                        date="1 week ago"
-                    />
-                    <TestimonialsCard
-                        name="David Rodriguez"
-                        position="Google Pixel 7 Customer"
-                        image="https://randomuser.me/api/portraits/men/75.jpg"
-                        review="Cracked screen was fixed perfectly. They even gave me a temporary phone while waiting. Excellent customer service and very professional."
-                        rating={4}
-                        device="Google Pixel 7"
-                        service="Screen Repair"
-                        date="3 days ago"
-                    />
-                    <TestimonialsCard
-                        name="Emily Watson"
-                        position="MacBook Pro Customer"
-                        image="https://randomuser.me/api/portraits/women/63.jpg"
-                        review="My MacBook wouldn't charge. They diagnosed the problem immediately - it was just a charging port issue. Fast service and honest diagnosis."
-                        rating={5}
-                        device="MacBook Pro"
-                        service="Charging Port Repair"
-                        date="5 days ago"
-                    />
-                    <TestimonialsCard
-                        name="James Wilson"
-                        position="OnePlus 11 Customer"
-                        image="https://randomuser.me/api/portraits/men/46.jpg"
-                        review="Dropped my phone and the back glass shattered. They replaced it with original quality glass. Looks brand new! Definitely my go-to repair shop now."
-                        rating={5}
-                        device="OnePlus 11"
-                        service="Back Glass Replacement"
-                        date="1 day ago"
-                    />
-                    <TestimonialsCard
-                        name="Lisa Anderson"
-                        position="iPad Air Customer"
-                        image="https://randomuser.me/api/portraits/women/17.jpg"
-                        review="My kid cracked the iPad screen. They fixed it quickly and even applied a screen protector for free. Very kid-friendly environment!"
-                        rating={5}
-                        device="iPad Air"
-                        service="Screen Repair"
-                        date="4 days ago"
-                    />
-                </div>
+  const activeTestimonial = testimonials[activeIndex] ?? testimonials[0]
 
-                {/* Trust Badges */}
-                <div className="mt-12 flex flex-wrap justify-center gap-8 items-center">
-                    <div className="flex items-center space-x-2">
-                        <div className="flex text-yellow-400">
-                            {[...Array(5)].map((_, i) => <FaStar key={i} />)}
-                        </div>
-                        <span className="text-gray-600">4.9/5 (1,234 reviews)</span>
-                    </div>
-                    <div className="h-8 w-px bg-gray-300"></div>
-                    <div className="flex items-center space-x-2">
-                        <FaShieldAlt className="text-blue-600 text-xl" />
-                        <span className="text-gray-600">90-Day Warranty</span>
-                    </div>
-                    <div className="h-8 w-px bg-gray-300"></div>
-                    <div className="flex items-center space-x-2">
-                        <FaClock className="text-blue-600 text-xl" />
-                        <span className="text-gray-600">2-Hour Fast Repair</span>
-                    </div>
-                </div>
+  return (
+    <section
+      ref={sectionRef}
+      id="testimonials"
+      className="relative overflow-hidden bg-[#f8fafc] py-20 sm:py-28"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #cbd5e1 1px, transparent 0)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+      <div className="pointer-events-none absolute -left-40 top-0 h-[420px] w-[420px] rounded-full bg-[#34c5f1]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[380px] rounded-full bg-[#a855f7]/10 blur-3xl" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55 }}
+          className="mx-auto mb-12 max-w-3xl text-center lg:mb-16"
+        >
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#34c5f1]/20 bg-white px-4 py-1.5 text-sm font-semibold text-[#1ab5e4] shadow-sm">
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+            Customer Reviews
+          </span>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
+            Real stories from{" "}
+            <span className="bg-gradient-to-r from-[#34c5f1] to-[#a855f7] bg-clip-text text-transparent">
+              real repairs
+            </span>
+          </h2>
+          <div className="mx-auto mt-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#34c5f1] to-[#a855f7]" />
+          <p className="mt-6 text-lg leading-relaxed text-gray-600">
+            From water-damaged phones to cracked screens — hear why customers keep coming back
+            to Tech Repair.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+        >
+          {[
+            {
+              label: (
+                <>
+                  {inView ? <CountUp end={reviewStats.average} decimals={1} duration={2} /> : "0.0"}
+                  <Star className="ml-1 inline h-4 w-4 fill-amber-400 text-amber-400" />
+                </>
+              ),
+              sub: "Average rating",
+            },
+            {
+              label: (
+                <>
+                  {inView ? <CountUp end={reviewStats.totalReviews} duration={2.2} separator="," /> : "0"}+
+                </>
+              ),
+              sub: "Total reviews",
+            },
+            {
+              label: (
+                <>
+                  {inView ? <CountUp end={reviewStats.recommendPercent} duration={2} /> : "0"}%
+                </>
+              ),
+              sub: "Would recommend",
+            },
+          ].map(({ label, sub }) => (
+            <div
+              key={sub}
+              className="flex min-w-[140px] flex-col items-center rounded-2xl border border-white/80 bg-white/90 px-6 py-4 shadow-sm backdrop-blur-sm"
+            >
+              <p className="text-2xl font-bold text-gray-900">{label}</p>
+              <p className="mt-1 text-xs font-medium text-gray-500">{sub}</p>
             </div>
-        </section>
-    )
+          ))}
+        </motion.div>
+
+        <div className="grid items-stretch gap-8 lg:grid-cols-[minmax(300px,360px)_1fr] lg:gap-10">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.15 }}
+          >
+            <RatingSummary />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="flex min-w-0 flex-col"
+          >
+            <FeaturedTestimonial testimonial={activeTestimonial} />
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.55, delay: 0.35 }}
+          className="mt-12 lg:mt-16"
+        >
+          <TestimonialsCarousel
+            activeTestimonialId={activeTestimonial.id}
+            onActiveIndexChange={setActiveIndex}
+          />
+        </motion.div>
+      </div>
+    </section>
+  )
 }
 
 export default Main

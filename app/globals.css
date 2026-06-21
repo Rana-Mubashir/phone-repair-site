@@ -61,3 +61,25 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* ================================
+   Testimonials Swiper
+================================ */
+
+.testimonials-swiper .swiper-slide {
+  height: auto;
+}
+
+.testimonials-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #d1d5db;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.testimonials-pagination .swiper-pagination-bullet-active {
+  width: 28px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #34c5f1, #a855f7);
+}
